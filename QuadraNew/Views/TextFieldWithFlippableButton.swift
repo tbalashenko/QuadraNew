@@ -10,13 +10,14 @@ import SwiftUI
 struct TextFieldWithFlippableButton: View {
     @Binding var text: String
     var error: String
+    @State var isLoading = false
     
     var additionalButtonImage: Image? = nil
-    var additionalButtonAction: (() -> Void)? = nil
+    var additionalAsyncButtonAction: (() async -> Void)? = nil
     var pasteButtonAction: ((String) -> Void)?
     
     private var showPasteButton: Bool { 
-        text.isEmpty || (additionalButtonAction == nil && additionalButtonImage == nil)
+        text.isEmpty || (additionalAsyncButtonAction == nil && additionalButtonImage == nil)
     }
     
     var body: some View {
@@ -30,7 +31,12 @@ struct TextFieldWithFlippableButton: View {
                 if showPasteButton {
                     PasteButton { pasteButtonAction?($0) }
                 } else {
-                    additionalButton()
+                    if isLoading {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .accentColor))
+                    } else {
+                        additionalButton()
+                    }
                 }
             }
             ErrorView(error: error)
@@ -40,9 +46,13 @@ struct TextFieldWithFlippableButton: View {
     @ViewBuilder
     func additionalButton() -> some View {
         if let additionalButtonImage,
-           let additionalButtonAction {
+           let additionalAsyncButtonAction {
             Button {
-                additionalButtonAction()
+                Task {
+                    isLoading = true
+                    await additionalAsyncButtonAction()
+                    isLoading = false
+                }
             } label: {
                 additionalButtonImage
                     .smallButtonImage()

@@ -36,7 +36,7 @@ final class NotificationsService {
                 case .denied:
                     DispatchQueue.main.async {
                         self.showSettingsAlert()
-                        completion(false, TextConstants.notificationsDenid)
+                        completion(false, TextConstants.notificationsDenied)
                     }
                 case .authorized, .provisional, .ephemeral:
                     DispatchQueue.main.async {

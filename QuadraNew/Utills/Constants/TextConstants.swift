@@ -47,7 +47,7 @@ struct TextConstants {
     static let lastRepetition = "Last repetition:"
     static let warning = "Warning"
     static let thatsItForToday = "That's it for today, but you can add new cards"
-    static let enterWord = "Enter the word you want to remember and tap the search button."
+    static let enterExpression = "Enter the expression you want to remember and tap the search button."
     static let noSamplePhrases = "Sorry, we didn't find any good example for you"
     static let copied = "Copied!"
     static let pasted = "Pasted!"
@@ -95,6 +95,7 @@ struct TextConstants {
     static let archive = "#archive"
     
     //Errors
+    static let incorrectUrl = "Incorrect URL"
     static let checkInternetConnection = "Check your internet connection"
     static let failedToDownloadImage = "Failed to download the image: "
     static let somethingWentWrong = "Something went wrong"
@@ -103,11 +104,15 @@ struct TextConstants {
     static let enableNotificationsMessage = "Please enable notifications in Settings to stay on track."
     static let allowAccessToPhotos = "Allow access to your photos"
     static let allowPhotoAccessMessage = "This app needs access to your photo library to select images. Please go to Settings and allow photo access to continue."
-    static let notificationsDenid = "Notifications are denied. Please enable them in settings."
+    static let notificationsDenied = "Notifications are denied. Please enable them in settings."
     static let unknownAuthorizationStatus = "Unknown authorization status"
     
+    static let aiSamplePrompt = """
+    Detect the language of: "{%@}". Generate 10 short, modern phrases in that language using the expression naturally. Only return the phrases, one per line. No comments, no numbers, no quotes."
+    """
+    
     static let notificationTitle = "Keep Learning!"
-    static let  notificationText = "Small habits make a big difference"
+    static let notificationText = "Small habits make a big difference"
     
     static let notificationTexts = [
         "Small habits make a big difference",

@@ -23,10 +23,11 @@ struct OtherView: View {
                         AboutAppView()
                     }
                     
+                    NavigationLink(TextConstants.getSample) {
+                        SamplePhrasesView()
+                    }
+                    
                     Section(TextConstants.testFeatures) {
-                        NavigationLink(TextConstants.getSample) {
-                            SamplePhrasesView()
-                        }
                         Button("Add random cards") {
                             Task {
                                 //await RandomDataService.shared.addRandomData()

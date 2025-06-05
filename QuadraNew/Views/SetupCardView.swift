@@ -59,7 +59,7 @@ struct SetupCardView: View {
                     text: $viewModel.url,
                     error: viewModel.urlError,
                     additionalButtonImage: Image(systemName: "square.and.arrow.down"),
-                    additionalButtonAction: { viewModel.downloadImage() },
+                    additionalAsyncButtonAction: { await viewModel.downloadImage() },
                     pasteButtonAction: {
                         viewModel.url = $0
                         showPopup = true

@@ -12,10 +12,22 @@ import SwiftData
 // MARK: - Combine
 extension SetupCardViewModel {
     func setupBindings() {
+        setupUrl()
         setupPhraseToRemember()
         setupTranslation()
         setupTranscription()
         setupNewSourceText()
+    }
+    
+    private func setupUrl() {
+        $url
+            .receive(on: RunLoop.main)
+            .sink { [weak self] value in
+                if value.isEmpty {
+                    self?.urlError = ""
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func setupPhraseToRemember() {
@@ -137,34 +149,24 @@ extension SetupCardViewModel {
 
 // MARK: - Image Downloading
 extension SetupCardViewModel {
-    func downloadImage() {
-        guard let url = URL(string: url) else { return }
-        
-        guard NetworkMonitor.shared.isConnected else { urlError = TextConstants.checkInternetConnection; return }
-        
-        urlError = ""
-        
-        URLSession.shared.dataTaskPublisher(for: url)
-            .map { $0.data }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                    case .failure(let error):
-                        self.urlError = TextConstants.failedToDownloadImage + (error.localizedDescription)
-                    case .finished:
-                        break
-                }
-            }, receiveValue: { data in
-                guard let uiImage = UIImage(data: data) else {
-                    self.urlError = TextConstants.somethingWentWrong
-                    print("Failed to create image from data")
-                    return
-                }
-                
-                self.image = Image(uiImage: uiImage)
-                self.croppedImage = Image(uiImage: uiImage)
-            })
-            .store(in: &cancellables)
+    @MainActor
+    func downloadImage() async {
+        do {
+            let data: Data = try await NetworkService.shared.fetch(urlString: url)
+            
+            guard let uiImage = UIImage(data: data) else {
+                urlError = TextConstants.somethingWentWrong
+                return
+            }
+            
+            self.image = Image(uiImage: uiImage)
+            self.croppedImage = Image(uiImage: uiImage)
+            self.urlError = ""
+        } catch let error as APIError {
+            urlError = error.errorDescription
+        } catch {
+            urlError = TextConstants.failedToDownloadImage + error.localizedDescription
+        }
     }
 }
 

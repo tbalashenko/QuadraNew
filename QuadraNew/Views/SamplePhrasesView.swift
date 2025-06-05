@@ -20,16 +20,16 @@ struct SamplePhrasesView: View {
                             text: $viewModel.searchText,
                             error: viewModel.searchTextError,
                             additionalButtonImage: Image(systemName: "magnifyingglass.circle.fill"),
-                            additionalButtonAction: { viewModel.fetchDefinition() },
+                            additionalAsyncButtonAction: { await viewModel.loadSamples() },
                             pasteButtonAction: {
                                 viewModel.searchText = $0
                                 showCopiedPopup = true
                             }
                         )
-                        Text(TextConstants.enterWord)
+                        Text(TextConstants.enterExpression)
                             .foregroundColor(.secondary)
                             .font(.footnote)
-                        Divider()
+                        
                         if viewModel.showError {
                             Text(TextConstants.noSamplePhrases)
                         }
