@@ -39,7 +39,8 @@ struct TextFieldWithFlippableButton: View {
     
     @ViewBuilder
     func additionalButton() -> some View {
-        if let additionalButtonImage, let additionalButtonAction {
+        if let additionalButtonImage,
+           let additionalButtonAction {
             Button {
                 additionalButtonAction()
             } label: {
@@ -63,8 +64,6 @@ struct ErrorView: View {
     }
 }
 
-//#Preview {
-//    TextFieldWithFlipableButton(text: .constant("Test"), showPasteButton: true) { _ in
-//        print("pasted")
-//    }
-//}
+#Preview {
+    TextFieldWithFlippableButton(text: .constant("Test"), error: "Test")
+}

@@ -53,6 +53,7 @@ final class NotificationsService {
             switch status {
             case .denied, .notDetermined:
                 completion(false)
+#warning("")
             case .authorized, .provisional, .ephemeral:
                 let canSend = UserDefaultsManager.boolForKey(UserDefaultsKeys.sendNotifications) ?? false
                 completion(canSend)

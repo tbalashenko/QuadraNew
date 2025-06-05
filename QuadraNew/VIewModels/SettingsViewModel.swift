@@ -9,30 +9,46 @@ import Foundation
 import Combine
 
 final class SettingsViewModel: ObservableObject {
-    @Published var selectedVoice: Voice = SettingsService.voice
-    @Published var selectedRatio: AspectRatio = SettingsService.aspectRatio
-    @Published var selectedImageScale: ImageScale = SettingsService.imageScale
-    @Published var showConfetti: Bool = SettingsService.showConfetti
+    @Published var selectedVoice: Voice = .englishUs0
+    @Published var selectedRatio: AspectRatio = .sixteenToNine
+    @Published var selectedImageScale: ImageScale = .percent100
+    @Published var showConfetti: Bool = true
     @Published var sendNotifications: Bool = false
-    @Published var highlighterPalette: HighlighterPalette = SettingsService.highliterPalette
-    @Published var showProgress: Bool = SettingsService.showProgress
-    @Published var reminderTime: Date = SettingsService.reminderTime
+    @Published var highlighterPalette: HighlighterPalette = .pale
+    @Published var showProgress: Bool = true
+    @Published var reminderTime: Date = Date()
     
-    private var needSetupNotifications: Bool { SettingsService.reminderTime != reminderTime  }
+    private var needSetupNotifications: Bool { settings.reminderTime != reminderTime  }
     private var cancellables = Set<AnyCancellable>()
+    
+    private let settings: SettingsService
 
-    init() {
+    init(settings: SettingsService) {
+        self.settings = settings
+        self.setup()
+        
         checkNotificationPermission()
         observeNotificationsSwitch()
     }
+    
+    func setup() {
+        selectedVoice = settings.voice
+        selectedImageScale = settings.imageScale
+        showConfetti = settings.showConfetti
+        sendNotifications = settings.sendNotifications
+        highlighterPalette = settings.highlighterPalette
+        showProgress = settings.showProgress
+        reminderTime = settings.reminderTime
+        selectedRatio = settings.aspectRatio
+    }
 
     func save() {
-        SettingsService.save(
+        settings.save(
             voice: selectedVoice,
             aspectRatio: selectedRatio,
             imageScale: selectedImageScale,
             showConfetti: showConfetti,
-            highliterPalette: highlighterPalette,
+            highlighterPalette: highlighterPalette,
             showProgress: showProgress,
             sendNotifications: sendNotifications
         )

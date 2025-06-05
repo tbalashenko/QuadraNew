@@ -78,7 +78,6 @@ final class ListViewModel: ObservableObject {
                 let sourceMatches = self.checkSourceMatches(card: card)
                 let dateRangeMatches = self.checkDateRangeMatches(card: card)
                 let archiveTagMatches = self.checkArchiveTagMatches(card: card)
-                
                 return textMatch && statusMatches && sourceMatches && dateRangeMatches && archiveTagMatches
             }
         
@@ -109,13 +108,12 @@ extension ListViewModel {
     }
 
     private func checkSourceMatches(card: Card) -> Bool {
-        if FilterService.shared.selectedSources.isEmpty {
-            return true
-        } else if let sources = card.cardSources {
-            return sources.contains(where: { FilterService.shared.selectedSources.contains($0) })
-        }
+        guard !FilterService.shared.selectedSources.isEmpty else { return true }
 
-        return false
+        guard let sources = card.cardSources else { return false }
+
+        let selectedIDs = Set(FilterService.shared.selectedSources.map { $0.id })
+        return sources.contains { selectedIDs.contains($0.id) }
     }
 
     private func checkDateRangeMatches(card: Card) -> Bool {

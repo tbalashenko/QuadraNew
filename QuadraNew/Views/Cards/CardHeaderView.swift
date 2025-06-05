@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CardHeaderView: View {
+    @EnvironmentObject var sizeConstants: SizeConstants
     @ObservedObject var viewModel: CardViewModel
     @State private var showFullImage: Bool = false
     
@@ -17,12 +18,12 @@ struct CardHeaderView: View {
                 image
                     .resizable()
                     .scaledToFill()
-                    .frame(size: SizeConstants.imageSize)
+                    .frame(size: sizeConstants.imageSize)
                     .clipped()
             } else {
                 Rectangle()
                     .foregroundColor(.element)
-                    .frame(size: SizeConstants.imageSize)
+                    .frame(size: sizeConstants.imageSize)
                 
             }
             AlignableView(alignment: .topTrailing) {
@@ -38,7 +39,7 @@ struct CardHeaderView: View {
             }
                 
         }
-        .frame(size: SizeConstants.imageSize)
+        .frame(size: sizeConstants.imageSize)
         .onTapGesture {
             if let _ = viewModel.fullImage {
                 showFullImage.toggle()
@@ -65,5 +66,5 @@ struct CardHeaderView: View {
             )
         )
     )
-    .frame(size: SizeConstants.imageSize)
+    .frame(size: SizeConstants(settings: SettingsService()).imageSize)
 }

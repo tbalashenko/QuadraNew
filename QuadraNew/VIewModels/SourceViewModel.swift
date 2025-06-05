@@ -10,15 +10,12 @@ import SwiftData
 import SwiftUI
 
 final class SourceViewModel: ObservableObject {
-    @Environment(\.modelContext) var modelContext
     @Published var source: CardSource
     @Published var editableTitle: String = ""
     @Published var compoundTitle: String = ""
     @Published var color: String = ""
     private var titleCopy: String = ""
     
-    @Query var sources: [CardSource]
-
     init(source: CardSource) {
         self.source = source
         self.editableTitle = source.title
@@ -26,8 +23,13 @@ final class SourceViewModel: ObservableObject {
         self.compoundTitle = getTitle(for: source)
         self.color = source.color
     }
-
-    func saveChanges() {
+    
+    func saveChanges(modelContext: ModelContext) {
+        let sourceId = source.id
+        
+        let descriptor = FetchDescriptor<CardSource>(predicate: #Predicate { $0.id == sourceId })
+        guard let source = try? modelContext.fetch(descriptor).first else { return }
+        
         source.title = editableTitle
         source.color = color
         

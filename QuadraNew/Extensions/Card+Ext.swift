@@ -8,10 +8,8 @@ import SwiftUI
 
 extension Card {
     // MARK: - Properties
-    var formattedTranscription: String? {
-        guard let transcription = transcription, !transcription.isEmpty else { return nil }
-        
-        return "[" + transcription + "]"
+    var convertedPhraseToRemember: AttributedString {
+        AttributedString(phraseToRemember)
     }
     
     var image: Image? {
@@ -85,7 +83,7 @@ extension Card {
         
         switch status {
             case .input:
-                if Date().daysAgo(from: creationDate) > 1, repetitionCounter > 0 {
+                if Date().daysAgo(from: creationDate) > 0, repetitionCounter > 0 {
                     cardStatus = CardStatus.nextDay.rawValue
                 }
             case .nextDay, .day7, .day30, .day60, .day90:

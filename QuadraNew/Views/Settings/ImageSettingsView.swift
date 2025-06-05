@@ -32,5 +32,5 @@ struct ImageSettingsView: View {
 }
 
 #Preview {
-    ImageSettingsView(viewModel: SettingsViewModel())
+    ImageSettingsView(viewModel: SettingsViewModel(settings: SettingsService()))
 }

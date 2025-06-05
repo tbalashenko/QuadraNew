@@ -36,7 +36,13 @@ final class SetupCardViewModel: ObservableObject {
     @Published var tagCloudItems: [TagCloudItem] = []
     @Published var selectedSources = [CardSource]()
     
+    private var settings: SettingsService
+    
     var cancellables: Set<AnyCancellable> = []
+    
+    var wasChanged: Bool {
+        !phraseToRemember.isEmpty
+    }
     
     let mode: SetupCardViewMode
     
@@ -44,9 +50,10 @@ final class SetupCardViewModel: ObservableObject {
         phraseToRemember.characters.isEmpty || !translationError.isEmpty && !transcriptionError.isEmpty
     }
     
-    init(mode: SetupCardViewMode = .create, sources: [CardSource]) {
+    init(mode: SetupCardViewMode = .create, sources: [CardSource], settings: SettingsService) {
         self.mode = mode
         self.sources = sources
+        self.settings = settings
         
         setupBindings()
     }
@@ -74,8 +81,8 @@ final class SetupCardViewModel: ObservableObject {
             cardSources: selectedSources,
             translation: translation,
             transcription: transcription,
-            imageData: image?.convert(scale: SettingsService.imageScale)?.pngData(),
-            croppedImageData: croppedImage?.convert(scale: SettingsService.imageScale)?.pngData()
+            imageData: image?.convert(scale: settings.imageScale)?.pngData(),
+            croppedImageData: croppedImage?.convert(scale: settings.imageScale)?.pngData()
         )
         
         if mode == .create {
@@ -83,7 +90,7 @@ final class SetupCardViewModel: ObservableObject {
         
             tag.cards.append(card)
             
-            sources.forEach { source in
+            selectedSources.forEach { source in
                 source.cards.append(card)
             }
         } else {

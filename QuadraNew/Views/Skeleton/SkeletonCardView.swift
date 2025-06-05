@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SkeletonCardView: View {
+    @EnvironmentObject var sizeConstants: SizeConstants
     @Environment(\.colorScheme) var colorScheme
     @Binding var isPresented: Bool
     
@@ -34,7 +35,7 @@ struct SkeletonCardView: View {
                     Spacer()
                 }
             }
-            .frame(size: SizeConstants.imageSize)
+            .frame(size: sizeConstants.imageSize)
             HStack(spacing: 12) {
                 SkeletonView()
                     .frame(width: 22, height: 22)

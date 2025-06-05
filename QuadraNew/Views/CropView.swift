@@ -13,6 +13,7 @@ struct CropView: View {
     var onCrop: (Image?, Bool) -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var sizeConstants: SizeConstants
     @State private var scale: CGFloat = 1
     @State private var magnifyBy: CGFloat = 1
     @State private var offset: CGSize = .zero
@@ -136,7 +137,7 @@ struct CropView: View {
         .coordinateSpace(name: "CropView")
         .gesture(drag)
         .gesture(magnification)
-        .frame(size: SizeConstants.imageSize)
+        .frame(size: sizeConstants.imageSize)
     }
 
     @ViewBuilder

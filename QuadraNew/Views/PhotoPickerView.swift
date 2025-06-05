@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct PhotoPickerView: View {
+    @EnvironmentObject var sizeConstants: SizeConstants
     @ObservedObject var viewModel: SetupCardViewModel
     
     @State private var photosPickerItem: PhotosPickerItem?
@@ -30,7 +31,7 @@ struct PhotoPickerView: View {
             }
         }
         .if(viewModel.image != nil) {
-            $0.frame(size: SizeConstants.imageSize)
+            $0.frame(size: sizeConstants.imageSize)
         }
         .center()
         .onChange(of: photosPickerItem) { setImage() }
@@ -42,7 +43,7 @@ struct PhotoPickerView: View {
         viewModel.croppedImage?
             .resizable()
             .scaledToFill()
-            .frame(size: SizeConstants.imageSize)
+            .frame(size: sizeConstants.imageSize)
             .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
     }
     

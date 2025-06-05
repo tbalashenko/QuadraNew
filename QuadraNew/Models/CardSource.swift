@@ -28,3 +28,6 @@ final class CardSource {
 
 // MARK: - Identifiable
 extension CardSource: Identifiable { }
+
+// MARK: - Equatable
+extension CardSource: Equatable { }

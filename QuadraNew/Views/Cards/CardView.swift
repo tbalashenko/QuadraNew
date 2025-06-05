@@ -13,7 +13,6 @@ struct CardView: View {
     var body: some View {
         VStack(spacing: SizeConstants.spacing) {
             CardHeaderView(viewModel: viewModel)
-                .background(.blue)
             
             if viewModel.isFlippable {
                 FlippableTextView(

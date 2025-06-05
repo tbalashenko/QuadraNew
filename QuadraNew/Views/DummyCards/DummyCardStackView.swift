@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct DummyCardStackView: View {
-    @StateObject var viewModel = DummyCardsViewModel()
-
+    @ObservedObject var viewModel: DummyCardsViewModel
+    
     var body: some View {
         ZStack(alignment: .center) {
             ForEach(viewModel.cardModels) { model in
@@ -18,20 +18,12 @@ struct DummyCardStackView: View {
                     model: model
                 )
             }
-            if viewModel.cardModels.isEmpty {
-                Button {
-                    viewModel.updateCardModels()
-                } label: {
-                    Image(systemName: "repeat.circle")
-                        .smallButtonImage()
-                }
-                .buttonStyle(NeuButtonStyle())
-            }
         }
+        .frame(size: SizeConstants.dummyCardSize)
     }
 }
 
 #Preview {
-    DummyCardStackView()
+    DummyCardStackView(viewModel: DummyCardsViewModel())
         .frame(size: SizeConstants.cardSize)
 }

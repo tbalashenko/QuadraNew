@@ -1,5 +1,5 @@
 //
-//  TextToSpeachPlayView.swift
+//  TextToSpeechPlayView.swift
 //  QuadraSwiftData
 //
 //  Created by Tatyana Balashenko on 18/05/2025.
@@ -8,20 +8,27 @@
 import SwiftUI
 
 struct TextToSpeechPlayView: View {
-    @StateObject var viewModel = TextToSpeechViewModel()
+    @EnvironmentObject var settings: SettingsService
+    @StateObject var viewModel: TextToSpeechViewModel
     var buttonSize: Size = .small
     var text: String
     var voice: Voice? = nil
+    
+    init(viewModel: TextToSpeechViewModel, buttonSize: Size = .small, text: String, voice: Voice? = nil) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+        self.buttonSize = buttonSize
+        self.text = text
+        self.voice = voice
+    }
 
     var body: some View {
-        Button(action: {
-            viewModel.speak(text: text, voice: voice)
-        }, label: {
-            Image(systemName: viewModel.isSpeaking ? "stop.circle" : "play.circle")
-                .smallButtonImage()
-                .foregroundStyle(Color.accentColor)
-        })
-        .padding(8)
+        SmallButton(image: viewModel.isSpeaking ? "stop.circle" : "play.circle") {
+            viewModel.speak(
+                text: text,
+                voice: voice
+            )
+        }
+        .padding(SizeConstants.spacing)
         .buttonStyle(NeuButtonStyle())
     }
 }
@@ -42,5 +49,5 @@ extension TextToSpeechPlayView {
 }
 
 #Preview {
-    TextToSpeechPlayView(text: "Long, long text")
+    //TextToSpeechPlayView(text: "Long, long text")
 }

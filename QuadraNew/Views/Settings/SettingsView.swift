@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @EnvironmentObject var settings: SettingsService
     @Environment(\.dismiss) private var dismiss
-    @StateObject var viewModel = SettingsViewModel()
-
+    
+    @StateObject var viewModel: SettingsViewModel
+    
+    init(viewModel: SettingsViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -53,6 +59,9 @@ struct SettingsView: View {
             .onAppear {
                 viewModel.checkNotificationPermission()
             }
+            .onDisappear {
+                viewModel.setup()
+            }
             .toolbar(.hidden, for: .tabBar)
             .navigationBarTitle(TextConstants.settings)
         }
@@ -60,5 +69,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView(viewModel: SettingsViewModel())
+    //SettingsView(viewModel: SettingsViewModel())
 }

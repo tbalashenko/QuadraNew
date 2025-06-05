@@ -9,11 +9,13 @@ import SwiftUI
 
 #warning("Rename")
 struct PlayableCardTitleTextView: View {
+    @EnvironmentObject var settings: SettingsService
     let text: AttributedString
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
-            TextToSpeechPlayView(text: text.description)
+            TextToSpeechPlayView(viewModel: TextToSpeechViewModel(settings: settings), text: String(text.characters))
+                .environmentObject(settings)
             Text(text)
                 .font(.title2)
                 .bold()

@@ -8,7 +8,7 @@
 import Foundation
 
 struct DummyCardService {
-    func fetchCardModels() async throws -> [DummyCardModel] {
+    func fetchCardModels() -> [DummyCardModel] {
         let cards = MockData.mockedCards
         return cards.map { DummyCardModel(item: $0) }
     }

@@ -14,7 +14,7 @@ struct SourcesView: View {
     
     var body: some View {
         List {
-            ForEach(sources, id: \.id) { source in
+            ForEach(sources) { source in
                 SourceListRowView(viewModel: SourceViewModel(source: source))
             }
             .onDelete(perform: deleteSources)
@@ -28,6 +28,8 @@ struct SourcesView: View {
             for index in offsets {
                 modelContext.delete(sources[index])
             }
+            
+            try? modelContext.save()
         }
     }
 }

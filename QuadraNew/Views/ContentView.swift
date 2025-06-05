@@ -10,6 +10,8 @@ import SwiftData
 import Combine
 
 struct ContentView: View {
+    @EnvironmentObject var settings: SettingsService
+    @EnvironmentObject var sizeConstants: SizeConstants
     @Environment(\.modelContext) private var modelContext
     @StateObject private var viewModel = ContentViewModel()
     @State private var showSetupCardView: Bool = false
@@ -50,18 +52,14 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItem {
-                    Button(action: {
+                    SmallButton(image: "plus.circle.fill") { 
                         showSetupCardView = true
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                            .smallButtonImage()
-                            .foregroundStyle(Color.accentColor)
                     }
-                    .buttonStyle(NeuButtonStyle())
+
                 }
             }
             .toolbar {
-                if !viewModel.showInfoView, SettingsService.showProgress {
+                if !viewModel.showInfoView, settings.showProgress {
                     ToolbarItem(placement: .topBarLeading) {
                         ProgressView(
                             value: viewModel.progress,
@@ -76,7 +74,7 @@ struct ContentView: View {
             .sheet(isPresented: $showSetupCardView) {
                 NavigationStack {
                     SetupCardView(
-                        viewModel: SetupCardViewModel(mode: .create, sources: allSources),
+                        viewModel: SetupCardViewModel(mode: .create, sources: allSources, settings: settings),
                         showSetupCardView: $showSetupCardView) { cardWasAdded in
                             if cardWasAdded {
                                 viewModel.setCards(allCards)

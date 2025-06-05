@@ -11,6 +11,11 @@ import AVFoundation
 class TextToSpeechViewModel: NSObject, ObservableObject {
     @Published var isSpeaking: Bool = false
     private let synthesizer = AVSpeechSynthesizer()
+    private let settings: SettingsService
+    
+    init(settings: SettingsService) {
+        self.settings = settings
+    }
 
     func speak(text: String, voice: Voice? = nil) {
         guard !synthesizer.isSpeaking else {
@@ -19,7 +24,7 @@ class TextToSpeechViewModel: NSObject, ObservableObject {
         }
         
         let utterance = AVSpeechUtterance(string: text)
-        let voice = voice ?? SettingsService.voice
+        let voice = voice ?? settings.voice
         
         utterance.voice = AVSpeechSynthesisVoice(identifier: voice.identifier)
         synthesizer.delegate = self

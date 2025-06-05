@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct VoicePickerView: View {
+    @EnvironmentObject var settings: SettingsService
     @ObservedObject var viewModel: SettingsViewModel
 
     var body: some View {
@@ -21,6 +22,7 @@ struct VoicePickerView: View {
             HStack {
                 Text(viewModel.selectedVoice.samplePhrase)
                 TextToSpeechPlayView(
+                    viewModel: TextToSpeechViewModel(settings: settings),
                     text: viewModel.selectedVoice.samplePhrase,
                     voice: viewModel.selectedVoice
                 )
@@ -30,5 +32,5 @@ struct VoicePickerView: View {
 }
 
 #Preview {
-    VoicePickerView(viewModel: SettingsViewModel())
+    VoicePickerView(viewModel: SettingsViewModel(settings: SettingsService()))
 }

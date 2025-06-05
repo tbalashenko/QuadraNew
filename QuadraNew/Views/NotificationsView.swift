@@ -28,5 +28,5 @@ struct NotificationsView: View {
 }
 
 #Preview {
-    NotificationsView(viewModel: SettingsViewModel())
+    NotificationsView(viewModel: SettingsViewModel(settings: SettingsService()))
 }

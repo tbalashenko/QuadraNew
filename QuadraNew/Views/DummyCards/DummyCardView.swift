@@ -6,10 +6,7 @@
 //
 
 import SwiftUI
-
-enum CardViewMode {
-    case repetition, view
-}
+import Combine
 
 struct DummyCardView: View {
     @ObservedObject var viewModel: DummyCardsViewModel
@@ -19,9 +16,6 @@ struct DummyCardView: View {
     @State private var degrees: Double = 0
 
     let model: DummyCardModel
-    var mode: CardViewMode = .repetition
-
-    private let timer = Timer.publish(every: 4, on: .main, in: .common).autoconnect()
 
     var body: some View {
         GeometryReader { geometry in
@@ -53,19 +47,14 @@ struct DummyCardView: View {
             .rotationEffect(.degrees(degrees))
             .offset(x: xOffset, y: yOffset)
             .animation(.snappy, value: xOffset)
-            .if(mode == .repetition) { content in
-                content.gesture(
-                    DragGesture()
-                        .onChanged(onDragChanged)
-                        .onEnded(onDragEnded)
-                )
+            .gesture(
+                DragGesture()
+                    .onChanged(onDragChanged)
+                    .onEnded(onDragEnded)
+            )
+            .onReceive(viewModel.$swipeAction) { action in
+                onRecieveSwipeAction(action)
             }
-            .onReceive(viewModel.$swipeAction, perform: { action in
-                if mode == .repetition { onRecieveSwipeAction(action) }
-            })
-            .onReceive(timer, perform: { _ in
-                if mode == .repetition { viewModel.timerAction() }
-            })
         }
     }
 }
@@ -127,11 +116,7 @@ private extension DummyCardView {
             return
         }
 
-        if width >= SizeConstants.screenCutOff {
-            swipeRight()
-        } else {
-            swipeLeft()
-        }
+        width >= SizeConstants.screenCutOff ? swipeRight() : swipeLeft()
     }
 }
 

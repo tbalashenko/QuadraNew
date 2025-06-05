@@ -40,12 +40,14 @@ final class SamplePhrasesViewModel: ObservableObject {
         NetworkService.shared.request(urlString: urlString) { (result: Result<[DictionaryResponse], APIError>) in
             DispatchQueue.main.async { [ weak self ] in
                 guard let self = self else { return }
+                
                 switch result {
                     case .success(let response):
                         showError = false
                         prepareSamples(for: response)
                     case .failure(let error):
                         print("Failed to fetch definition: \(error)")
+                        samples.removeAll()
                         showError = true
                 }
             }

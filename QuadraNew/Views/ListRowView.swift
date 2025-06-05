@@ -10,13 +10,13 @@ import SwiftData
 
 struct ListRowView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject var sizeConstants: SizeConstants
+    @ObservedObject var cardViewModel: CardViewModel
     
     @State private var offset: CGFloat = -SizeConstants.screenWidth / 2
     @State private var lastOffset: CGFloat = .zero
-    @State private var imageSize: CGSize = SizeConstants.listImageSize
+    @State private var imageSize: CGSize = .zero
     @State private var isMaxImageSize: Bool = false
-    
-    @ObservedObject var cardViewModel: CardViewModel
 
     var body: some View {
         ZStack {
@@ -60,6 +60,9 @@ struct ListRowView: View {
         }
         .toolbarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
+        .onAppear {
+            imageSize = sizeConstants.listImageSize
+        }
     }
 
     
@@ -76,7 +79,7 @@ struct ListRowView: View {
     private var content: some View {
         HStack {
             Spacer()
-                .frame(width: cardViewModel.card.croppedImage != nil ? SizeConstants.listImageSize.width / 2 - 16 : 0)
+                .frame(width: cardViewModel.card.croppedImage != nil ? sizeConstants.listImageWidth / 2 - 16 : 0)
             Text(cardViewModel.card.convertedPhraseToRemember)
                 .font(.system(size: 14))
                 .multilineTextAlignment(.leading)
@@ -107,13 +110,13 @@ extension ListRowView {
         if !isMaxImageSize, value.translation.width > 0 {
             withAnimation(.bouncy(duration: 2)) {
                 offset = .zero
-                imageSize = SizeConstants.listImageFullSize
+                imageSize = sizeConstants.listImageFullSize
                 isMaxImageSize = true
             }
         } else if isMaxImageSize, value.translation.width < 0 {
             withAnimation(.bouncy(duration: 2)) {
                 offset = -SizeConstants.screenWidth / 2
-                imageSize = SizeConstants.listImageSize
+                imageSize = sizeConstants.listImageSize
                 isMaxImageSize = false
             }
         }

@@ -8,48 +8,47 @@
 import SwiftUI
 
 struct SourceListRowView: View {
+    @Environment(\.modelContext) var modelContext
     @StateObject var viewModel: SourceViewModel
     @State var isEditing = false
 
     var body: some View {
-        HStack(spacing: 24) {
+        HStack(alignment: .center) {
             ColorPicker("", selection: Binding<Color>(
                 get: { Color(hex: viewModel.color) },
                 set: {
                     viewModel.color = $0.toHex()
-                    viewModel.saveChanges()
+                    viewModel.saveChanges(modelContext: modelContext)
                 }
             ))
-            .frame(size: SizeConstants.smallButtonImageSize)
+            .labelsHidden()
             .northWestShadow()
 
             if isEditing {
                 HStack(spacing: 12) {
                     TextField("", text: $viewModel.editableTitle)
                         .textFieldStyle(NeuTextFieldStyle(text: $viewModel.editableTitle))
-
+                    
                     Spacer()
-
-                    Button {
-                        viewModel.saveChanges()
+                    
+                    SmallButton(
+                        image: "checkmark.circle.fill",
+                        foregroundStyle: viewModel.editableTitle.isEmpty
+                            ? .Green.isabelline
+                            : .Green.darkSeaGreen
+                    ) {
+                        viewModel.saveChanges(modelContext: modelContext)
                         isEditing = false
-                    } label: {
-                        Image(systemName: "checkmark.circle.fill")
-                            .smallButtonImage()
-                            .foregroundStyle(viewModel.editableTitle.isEmpty ? Color.Green.isabelline : Color.Green.darkSeaGreen)
                     }
-                    .buttonStyle(NeuButtonStyle())
                     .disabled(viewModel.editableTitle.isEmpty)
-
-                    Button {
+                    
+                    SmallButton(
+                        image: "xmark.circle.fill",
+                        foregroundStyle: .puce
+                    ) {
                         isEditing = false
                         viewModel.resetChanges()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .smallButtonImage()
-                            .foregroundStyle(Color.puce)
                     }
-                    .buttonStyle(NeuButtonStyle())
                 }
             } else {
                 Text(viewModel.compoundTitle)
@@ -69,5 +68,39 @@ struct SourceListRowView: View {
 }
 
 #Preview {
-//    SourceListRowView(viewModel: SourceViewModel(source: CardSource()))
+    let sources: [CardSource] = [
+        CardSource(
+            title: "Test1",
+            color: Color.blue.toHex()
+        ),
+        CardSource(
+            title: "Test2",
+            color: Color.blue.toHex()
+        ),
+        CardSource(
+            title: "Test3",
+            color: Color.blue.toHex()
+        ),
+        CardSource(
+            title: "Test4",
+            color: Color.blue.toHex()
+        )
+    ]
+    
+    List {
+        ForEach(sources) { source in
+            SourceListRowView(viewModel: SourceViewModel(source: source))
+        }
+    }
+    .customListStyle()
+    
+    
+//    SourceListRowView(
+//        viewModel: SourceViewModel(
+//            source: CardSource(
+//                title: "Test",
+//                color: Color.blue.toHex()
+//            )
+//        )
+//    )
 }

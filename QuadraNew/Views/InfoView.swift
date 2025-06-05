@@ -17,24 +17,16 @@ struct InfoView: View {
     @Query private var cards: [Card]
     
     var body: some View {
-        VStack {
-            if viewModel.showHowToUseTheApp {
-                NavigationLinkWithTextAndImage(destination: {
-                    HowToUseTheAppView()
-                }, title: TextConstants.howToUse, image: "info.circle")
-            }
-            
-            Spacer()
-                .frame(height: 16)
-            
-            Text(viewModel.getHint())
-            
-            if viewModel.isReadyToRepeat {
-                PlainButtonWithImage(
-                    title: TextConstants.restart,
-                    image: "repeat.circle",
-                    onAction: { onAction?() }
-                )
+        
+        Group {
+            if cards.isEmpty {
+                HowToUseTheAppView()
+            } else {
+                if viewModel.isReadyToRepeat {
+                    RepeatButton { onAction?() }
+                } else {
+                    Text(viewModel.noReadyToReviewCardsHint)
+                }
             }
         }
         .onAppear {

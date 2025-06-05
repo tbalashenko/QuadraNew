@@ -16,7 +16,7 @@ struct SamplePhrasesView: View {
             List {
                 Section {
                     VStack(alignment: .leading) {
-                        TextFieldWithFlipableButton(
+                        TextFieldWithFlippableButton(
                             text: $viewModel.searchText,
                             error: viewModel.searchTextError,
                             additionalButtonImage: Image(systemName: "magnifyingglass.circle.fill"),

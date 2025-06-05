@@ -6,14 +6,17 @@
 //
 
 import SwiftUI
+import AVFAudio
 
 struct OtherView: View {
+    @EnvironmentObject var settings: SettingsService
+    
     var body: some View {
         NavigationStack {
             List {
                 Group {
                     NavigationLink(TextConstants.settings) {
-                        SettingsView()
+                        SettingsView(viewModel: SettingsViewModel(settings: settings))
                     }
                     
                     NavigationLink(TextConstants.aboutApp) {
@@ -26,7 +29,7 @@ struct OtherView: View {
                         }
                         Button("Add random cards") {
                             Task {
-                                await RandomDataService.shared.addRandomData()
+                                //await RandomDataService.shared.addRandomData()
                             }
                         }
                     }

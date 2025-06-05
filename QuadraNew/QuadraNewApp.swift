@@ -12,8 +12,14 @@ import SwiftData
 struct QuadraNewApp: App {
     var sharedModelContainer: ModelContainer
     @StateObject private var appState = AppState.shared
+    @StateObject private var settingsService: SettingsService
+    @StateObject private var sizeConstants: SizeConstants
     
     init() {
+        let settings = SettingsService()
+        _settingsService = StateObject(wrappedValue: settings)
+        _sizeConstants = StateObject(wrappedValue: SizeConstants(settings: settings))
+        
         ValueTransformer.setValueTransformer(
             AttributedStringTransformer(),
             forName: NSValueTransformerName("AttributedStringTransformer")
@@ -46,11 +52,13 @@ struct QuadraNewApp: App {
                 StatView()
                     .tabItem { Image(systemName: "chart.xyaxis.line") }
                     .tag(AppTab.stat)
-//                OtherView()
-//                    .tabItem { Image(systemName: "gearshape") }
-//                    .tag(AppTab.settings)
+                OtherView()
+                    .tabItem { Image(systemName: "gearshape") }
+                    .tag(AppTab.settings)
             }
         }
         .modelContainer(sharedModelContainer)
+        .environmentObject(settingsService)
+        .environmentObject(sizeConstants)
     }
 }

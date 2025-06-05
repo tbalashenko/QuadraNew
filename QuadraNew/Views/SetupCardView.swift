@@ -92,7 +92,7 @@ struct SetupCardView: View {
     @ViewBuilder
     private func transcriptionSection() -> some View {
         Section(TextConstants.transcription) {
-            TextFieldWithFlipableButton(
+            TextFieldWithFlippableButton(
                 text: $viewModel.transcription,
                 error: viewModel.transcriptionError,
                 pasteButtonAction: { text in
@@ -105,7 +105,6 @@ struct SetupCardView: View {
         }
     }
     
-    @ViewBuilder
     private func sourcesSection() -> some View {
         Section(TextConstants.sources) {
             AddNewSourceView(viewModel: viewModel)
@@ -122,7 +121,6 @@ struct SetupCardView: View {
         Button(TextConstants.no, role: .cancel) { }
     }
     
-    @ViewBuilder
     private func saveButton() -> some View {
         Button(TextConstants.save) {
             hideKeyboard()
@@ -133,16 +131,14 @@ struct SetupCardView: View {
         .disabled(viewModel.isSaveButtonDisabled)
     }
     
-#warning("")
-    @ViewBuilder
     private func cancelButton() -> some View {
         Button(TextConstants.cancel) {
-            //            if viewModel.hasChanged {
-            //                showAlert = true
-            //            } else {
-            //                showSetupCardView = false
-            //                onDismiss?(false)
-            //            }
+            if viewModel.wasChanged {
+                showAlert = true
+            } else {
+                showSetupCardView = false
+                onDismiss?(false)
+            }
         }
     }
 }

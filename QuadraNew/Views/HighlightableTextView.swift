@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct HighlightableTextView: View {
+    @EnvironmentObject var settings: SettingsService
     @State private var dynamicHeight: CGFloat = 50
     @State private var showingPlaceholder = true
     @Binding var text: AttributedString
     var error: String
-    let palette = SettingsService.highliterPalette
     var pasteButtonAction: ((String) -> Void)?
 
     var body: some View {
@@ -21,11 +21,11 @@ struct HighlightableTextView: View {
                 ZStack {
                     UITextViewRepresentable(
                         text: $text,
-                        pallete: palette,
+                        pallete: settings.highlighterPalette,
                         calculatedHeight: $dynamicHeight
                     )
-                    .padding(.leading, 16)
-                    .padding(.trailing, 32)
+                    .padding(.leading, SizeConstants.mediumSpacing)
+                    .padding(.trailing, SizeConstants.bigSpacing)
                     .background(
                         Color.element
                             .shadow(.inner(color: .highlight, radius: 3, x: -3, y: -3))

@@ -29,9 +29,9 @@ struct NeuTextFieldStyle: TextFieldStyle {
             }
             configuration
                 .lineLimit(5)
-                .padding(.leading, 16)
-                .padding(.trailing, 32)
-                .padding(.vertical, 8)
+                .padding(.leading, SizeConstants.mediumSpacing)
+                .padding(.trailing, SizeConstants.bigSpacing)
+                .padding(.vertical, SizeConstants.spacing)
                 .frame(minHeight: 36)
                 .background(
                     Color.element

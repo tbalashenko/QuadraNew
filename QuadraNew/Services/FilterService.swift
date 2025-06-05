@@ -33,7 +33,6 @@ final class FilterService: ObservableObject {
         if !wasInitiallySet {
             wasInitiallySet.toggle()
             self.selectedArchiveTags = archiveTags
-            self.selectedSources = cardSources
         }
         
         setupDates()

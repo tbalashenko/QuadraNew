@@ -7,35 +7,21 @@
 
 
 import SwiftUI
-import SwiftData
+import Combine
 
 final class InfoViewModel: ObservableObject {
-    @Published var showHowToUseTheApp = false
+    let noReadyToReviewCardsHint = TextConstants.thatsItForToday
+    
     var cards: [Card] = []
-    
-    
     
     var isReadyToRepeat: Bool {
         cards
             .filter { $0.isReadyToRepeat }
             .count > 0
     }
-
-    func getHint() -> String {
-        let readyToRepeatCards = cards.filter { $0.isReadyToRepeat }
-
-        if cards.isEmpty {
-            return TextConstants.addFirstCards
-        } else if readyToRepeatCards.isEmpty {
-            return TextConstants.thatsItForToday
-        }
-
-        return ""
-    }
     
     func setup(cards: [Card]) {
         self.cards = cards
-        showHowToUseTheApp = cards.isEmpty
     }
 }
 

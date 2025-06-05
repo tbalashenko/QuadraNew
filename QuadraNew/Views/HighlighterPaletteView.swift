@@ -31,5 +31,5 @@ struct HighlighterPaletteView: View {
 }
 
 #Preview {
-    HighlighterPaletteView(viewModel: SettingsViewModel())
+    HighlighterPaletteView(viewModel: SettingsViewModel(settings: SettingsService()))
 }

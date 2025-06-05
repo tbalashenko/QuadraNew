@@ -37,7 +37,10 @@ struct TextConstants {
     static let closeWithoutSavingHelp = "Are you sure you want to close the window without saving?"
     static let period = "Period"
     
-    static let addFirstCards = "Add your first cards"
+    static let addFirstCards = "1. Tap the plus button \n to add your first cards."
+    static let readThem = "2. Read every phrase aloud \n to make it stick."
+    static let swipeThem = "3. Swipe left or right."
+    static let returnBackEveryDay = "4. Return to the app daily to review previous cards and add new ones."
     static let continueAddAndRepHelp = "Continue adding and repeating your cards daily to see statistics"
     static let added = "Added:"
     static let numberOfRepetitions = "Number of repetitions:"

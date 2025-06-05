@@ -17,8 +17,8 @@ struct AddNewSourceView: View {
     var body: some View {
         HStack {
             ColorPicker("", selection: $viewModel.sourceColor)
-                .frame(size: SizeConstants.mediumButtonImageSize)
                 .northWestShadow()
+                .labelsHidden()
             TextField(TextConstants.addSource, text: $viewModel.newSourceText)
                 .textFieldStyle(NeuTextFieldStyle(text: $viewModel.newSourceText))
                 .padding(.horizontal, 4)

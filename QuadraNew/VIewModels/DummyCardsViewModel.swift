@@ -6,40 +6,57 @@
 //
 
 import Foundation
+import Combine
 
 enum SwipeAction {
     case left, right
 }
 
-@MainActor
 class DummyCardsViewModel: ObservableObject {
+    @Published var currentTime = Date()
     @Published var cardModels = [DummyCardModel]()
     @Published var swipeAction: SwipeAction?
+    private var timer: Publishers.Autoconnect<Timer.TimerPublisher>?
 
     private let service = DummyCardService()
+    
+    private var cancellables: Set<AnyCancellable> = []
+    private var cancellable: AnyCancellable?
 
     init() {
-        Task { await fetchCardModels() }
-    }
-
-    func fetchCardModels() async {
-        do {
-            self.cardModels = try await service.fetchCardModels()
-        } catch {
-            print("Failed to fetch cards with error \(error)")
-        }
+        updateCardModels()
     }
 
     func removeCard(_ card: DummyCardModel) {
         guard let index = cardModels.firstIndex(where: { $0.id == card.id }) else { return }
+        
         cardModels.remove(at: index)
+        if cardModels.isEmpty {
+            stopTimer()
+        }
     }
 
     func timerAction() {
-        swipeAction = Bool.random() ? SwipeAction.left : SwipeAction.right
+        swipeAction = cardModels.count % 2 == 0 ? SwipeAction.left : SwipeAction.right
     }
 
     func updateCardModels() {
-        Task { await fetchCardModels() }
+        cardModels = service.fetchCardModels()
+        startTimer()
+    }
+    
+    func startTimer() {
+        timer = Timer.publish(every: 4, on: .main, in: .common).autoconnect()
+        cancellable = timer?
+            .sink { [weak self] value in
+                self?.timerAction()
+            }
+    }
+    
+    func stopTimer() {
+        cancellable?.cancel()
+        cancellable = nil
+        timer = nil
+        swipeAction = nil
     }
 }

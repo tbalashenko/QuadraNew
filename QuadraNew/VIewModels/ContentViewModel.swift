@@ -12,7 +12,7 @@ import SwiftData
 final class ContentViewModel: ObservableObject {
     @Published var visibleCardModels = [CardViewModel]()
     @Published var showConfetti = false
-    @Published var showInfoView = false
+    @Published var showInfoView = true
     @Published var readyToRepeatCards: [Card] = []
     
     var totalNumberOfCards = 0
@@ -42,9 +42,9 @@ final class ContentViewModel: ObservableObject {
         let descriptor = FetchDescriptor<Card>(predicate: #Predicate { $0.id == id })
         
         if let card = try? context.fetch(descriptor).first {
+            card.repetitionCounter += 1
             card.setNextReviewDate()
             card.setNewStatus()
-            card.repetitionCounter += 1
             
             do {
                 try context.save()
