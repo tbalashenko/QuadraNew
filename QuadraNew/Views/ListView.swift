@@ -8,7 +8,6 @@
 import SwiftUI
 import Combine
 import SwiftData
-#warning("mode .view")
 
 struct ListView: View {
     @Environment(\.modelContext) private var modelContext
@@ -25,7 +24,7 @@ struct ListView: View {
                     if let cards = viewModel.filteredCards[status] {
                         Section(header: Text(status.title)) {
                             ForEach(cards) { card in
-                                ListRowView(cardViewModel: CardViewModel(card: card))
+                                ListRowView(cardViewModel: CardViewModel(card: card, mode: .view))
                                     .customListRow()
                             }
                             .onDelete { indexSet in
@@ -53,6 +52,7 @@ struct ListView: View {
             }
         }
     }
+    
     private func deleteCard(status: CardStatus, offset: IndexSet) {
         withAnimation {
             for index in offset {

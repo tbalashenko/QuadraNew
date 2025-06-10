@@ -4,11 +4,11 @@
 //
 //  Created by Tatyana Balashenko on 28/05/2025.
 //
-
 import SwiftUI
 import Combine
 import SwiftData
 
+@MainActor
 final class SetupCardViewModel: ObservableObject {
     @Published var image: Image?
     @Published var croppedImage: Image?
@@ -36,76 +36,61 @@ final class SetupCardViewModel: ObservableObject {
     @Published var tagCloudItems: [TagCloudItem] = []
     @Published var selectedSources = [CardSource]()
     
-    private var settings: SettingsService
+    let mode: SetupCardViewMode
+    var card: Card?
     
     var cancellables: Set<AnyCancellable> = []
     
-    var wasChanged: Bool {
-        !phraseToRemember.isEmpty
-    }
-    
-    let mode: SetupCardViewMode
+    var wasChanged: Bool { !phraseToRemember.isEmpty }
     
     var isSaveButtonDisabled: Bool {
-        phraseToRemember.characters.isEmpty || !translationError.isEmpty && !transcriptionError.isEmpty
+        phraseToRemember.isEmpty || !translationError.isEmpty && !transcriptionError.isEmpty
     }
     
-    init(mode: SetupCardViewMode = .create, sources: [CardSource], settings: SettingsService) {
+    init(
+        mode: SetupCardViewMode,
+        sources: [CardSource],
+        card: Card? = nil
+    ) {
         self.mode = mode
         self.sources = sources
-        self.settings = settings
         
         setupBindings()
-    }
-    
-    func formatAndSetPhrase(_ text: String, string: inout AttributedString) {
-        let updatedAttributes: [NSAttributedString.Key: Any] = [
-            .backgroundColor: UIColor.clear,
-            .font: UIFont.systemFont(ofSize: 18),
-            .foregroundColor: UIColor.black
-        ]
         
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttributes(updatedAttributes, range: NSRange(location: 0, length: attributedString.length))
-        
-        string = AttributedString(attributedString)
-    }
-    
-    @MainActor
-    func saveCard(context: ModelContext) {
-        guard let tag = try? getOrCreateArchiveTag(context: context) else { return }
-        
-        let card = Card(
-            phraseToRemember: phraseToRemember,
-            archiveTag: tag,
-            cardSources: selectedSources,
-            translation: translation,
-            transcription: transcription,
-            imageData: image?.convert(scale: settings.imageScale)?.pngData(),
-            croppedImageData: croppedImage?.convert(scale: settings.imageScale)?.pngData()
-        )
-        
-        if mode == .create {
-            context.insert(card)
-        
-            tag.cards.append(card)
-            
-            selectedSources.forEach { source in
-                source.cards.append(card)
+        if let card {
+            self.card = card
+            self.phraseToRemember = AttributedString(card.phraseToRemember)
+            if let translation = card.translation {
+                self.translation = AttributedString(translation)
             }
-        } else {
-#warning("")
+            self.transcription = card.transcription ?? ""
+            
+            let image = card.imageData.flatMap { UIImage(data: $0) }.map { Image(uiImage: $0) }
+            let croppedImage = card.croppedImageData.flatMap { UIImage(data: $0) }.map { Image(uiImage: $0) }
+            
+            self.croppedImage = croppedImage ?? image
+            self.image = image
+            
+            self.selectedSources = card.cardSources ?? []
+            updateTagCloudItems()
         }
-        
+    }
+    
+    func saveCard(context: ModelContext, cardService: CardService, settings: SettingsService) async {
         do {
-            try context.save()
+            let input = makeCardInput(settings: settings)
+            
+            if mode == .create {
+                let archiveTag = try getOrCreateArchiveTag(context: context)
+                
+                try cardService.createCard(from: input, archiveTag: archiveTag, context: context)
+            } else if let card = card, let existingCard = try cardService.fetchExistingCard(card, context: context) {
+                try cardService.updateCard(existingCard, with: input, context: context)
+            }
+            
+            FilterService.shared.reset()
         } catch {
             print("Failed to save card: \(error.localizedDescription)")
         }
-        
-        FilterService.shared.reset()
     }
 }
-
-
-

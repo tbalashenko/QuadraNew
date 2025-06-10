@@ -14,10 +14,13 @@ struct QuadraNewApp: App {
     @StateObject private var appState = AppState.shared
     @StateObject private var settingsService: SettingsService
     @StateObject private var sizeConstants: SizeConstants
+    @StateObject private var cardService: CardService
     
     init() {
         let settings = SettingsService()
+        let cardService = CardService()
         _settingsService = StateObject(wrappedValue: settings)
+        _cardService = StateObject(wrappedValue: cardService)
         _sizeConstants = StateObject(wrappedValue: SizeConstants(settings: settings))
         
         ValueTransformer.setValueTransformer(
@@ -60,5 +63,6 @@ struct QuadraNewApp: App {
         .modelContainer(sharedModelContainer)
         .environmentObject(settingsService)
         .environmentObject(sizeConstants)
+        .environmentObject(cardService)
     }
 }

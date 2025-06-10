@@ -20,7 +20,7 @@ struct ListRowView: View {
 
     var body: some View {
         ZStack {
-            cardViewModel.card.croppedImage?
+            cardViewModel.image?
                 .resizable()
                 .scaledToFill()
                 .frame(size: imageSize)
@@ -79,7 +79,7 @@ struct ListRowView: View {
     private var content: some View {
         HStack {
             Spacer()
-                .frame(width: cardViewModel.card.croppedImage != nil ? sizeConstants.listImageWidth / 2 - 16 : 0)
+                .frame(width: cardViewModel.image != nil ? sizeConstants.listImageWidth / 2 - 16 : 0)
             Text(cardViewModel.card.convertedPhraseToRemember)
                 .font(.system(size: 14))
                 .multilineTextAlignment(.leading)

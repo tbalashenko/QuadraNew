@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import CoreData
+import SwiftData
 
 struct StatView: View {
     @StateObject var viewModel = StatViewModel()
@@ -21,9 +21,14 @@ struct StatView: View {
             $viewModel.showRepeatedCards
         ]
     }
+    
+    @Query var statData: [StatData]
 
     var body: some View {
         NavigationStack {
+            if statData.isEmpty {
+                StatEmptyView()
+            }
 //            if StatDataService.shared.statData.count < 3 {
 //                StatEmptyView()
 //            } else {

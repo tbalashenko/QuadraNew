@@ -19,6 +19,7 @@ struct SamplePhrasesView: View {
                         TextFieldWithFlippableButton(
                             text: $viewModel.searchText,
                             error: viewModel.searchTextError,
+                            placeholder: TextConstants.expressionToSearch,
                             additionalButtonImage: Image(systemName: "magnifyingglass.circle.fill"),
                             additionalAsyncButtonAction: { await viewModel.loadSamples() },
                             pasteButtonAction: {

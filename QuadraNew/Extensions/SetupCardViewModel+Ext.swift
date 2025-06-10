@@ -9,6 +9,23 @@ import SwiftUI
 import Combine
 import SwiftData
 
+// MARK: - SetupCardViewMode
+extension SetupCardViewModel {
+    enum SetupCardViewMode {
+        case create
+        case edit
+        
+        var navigationTitle: String {
+            switch self {
+                case .create:
+                    return TextConstants.addCard
+                case .edit:
+                    return TextConstants.editCard
+            }
+        }
+    }
+}
+
 // MARK: - Combine
 extension SetupCardViewModel {
     func setupBindings() {
@@ -41,7 +58,11 @@ extension SetupCardViewModel {
             .sink { [weak self] isValid in
                 guard let self = self else { return }
                 
-                isValid ? (self.phraseToRememberError = "") : Helper.getErrorMessage(for: self.phraseToRemember, errorText: &self.phraseToRememberError)
+                if isValid {
+                    self.phraseToRememberError = ""
+                } else {
+                    Helper.getErrorMessage(for: self.phraseToRemember, errorText: &self.phraseToRememberError)
+                }
             }
             .store(in: &cancellables)
     }
@@ -57,7 +78,11 @@ extension SetupCardViewModel {
             .sink { [weak self] isValid in
                 guard let self = self else { return }
                 
-                isValid ? (self.translationError = "") : Helper.getErrorMessage(for: self.translation, errorText: &self.translationError)
+                if isValid {
+                    self.translationError = ""
+                } else {
+                    Helper.getErrorMessage(for: self.translation, errorText: &self.translationError)
+                }
             }
             .store(in: &cancellables)
     }
@@ -73,7 +98,11 @@ extension SetupCardViewModel {
             .sink { [weak self] isValid in
                 guard let self = self else { return }
                 
-                isValid ? (self.transcriptionError = "") : Helper.getErrorMessage(for: self.transcription, errorText: &self.transcriptionError)
+                if isValid {
+                    self.transcriptionError = ""
+                } else {
+                    Helper.getErrorMessage(for: self.transcription, errorText: &self.transcriptionError)
+                }
             }
             .store(in: &cancellables)
     }
@@ -170,20 +199,32 @@ extension SetupCardViewModel {
     }
 }
 
-
-// MARK: - SetupCardViewMode
 extension SetupCardViewModel {
-    enum SetupCardViewMode {
-        case create
-        case edit
+    func formatAndSetPhrase(_ text: String, string: inout AttributedString) {
+        let updatedAttributes: [NSAttributedString.Key: Any] = [
+            .backgroundColor: UIColor.clear,
+            .font: UIFont.systemFont(ofSize: 18),
+            .foregroundColor: UIColor.black
+        ]
         
-        var navigationTitle: String {
-            switch self {
-                case .create:
-                    return TextConstants.addCard
-                case .edit:
-                    return TextConstants.editCard
-            }
-        }
+        let attributedString = NSMutableAttributedString(string: text)
+        attributedString.addAttributes(updatedAttributes, range: NSRange(location: 0, length: attributedString.length))
+        
+        string = AttributedString(attributedString)
+    }
+    
+    func makeCardInput(settings: SettingsService) -> CardInput {
+        let scale = settings.imageScaleSetting
+        let imageData = image?.convert(scale: scale)?.pngData()
+        let croppedData = croppedImage?.convert(scale: scale)?.pngData()
+        
+        return CardInput(
+            phrase: phraseToRemember,
+            translation: translation,
+            transcription: transcription,
+            sources: selectedSources,
+            imageData: imageData,
+            croppedImageData: croppedData
+        )
     }
 }

@@ -12,13 +12,20 @@ import Foundation
 final class StatData {
     @Attribute(.unique)
     public var id: UUID = UUID()
+    
     var date: Date
     var addedItemsCounter: Int
     var deletedItemsCounter: Int
     var repeatedItemsCounter: Int
     var totalNumberOfCards: Int
     
-    init(date: Date, addedItemsCounter: Int, deletedItemsCounter: Int, repeatedItemsCounter: Int, totalNumberOfCards: Int) {
+    init(
+        date: Date = Date(),
+        addedItemsCounter: Int,
+        deletedItemsCounter: Int,
+        repeatedItemsCounter: Int,
+        totalNumberOfCards: Int
+    ) {
         self.date = date
         self.addedItemsCounter = addedItemsCounter
         self.deletedItemsCounter = deletedItemsCounter

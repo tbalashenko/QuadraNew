@@ -12,24 +12,6 @@ extension Card {
         AttributedString(phraseToRemember)
     }
     
-    var image: Image? {
-        guard
-            let imageData = imageData,
-            let uiImage = UIImage(data: imageData)
-        else { return nil }
-        
-        return Image(uiImage: uiImage)
-    }
-    
-    var croppedImage: Image? {
-        guard
-            let imageData = croppedImageData,
-            let uiImage = UIImage(data: imageData)
-        else { return nil }
-        
-        return Image(uiImage: uiImage)
-    }
-    
     var isImageDark: Bool? {
         guard
             let imageData = croppedImageData,

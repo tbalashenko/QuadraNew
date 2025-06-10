@@ -9,7 +9,7 @@ import Foundation
 
 extension AttributedString: TextRepresentable {
     var count: Int {
-        return self.characters.count
+        self.characters.count
     }
 }
 
@@ -17,4 +17,8 @@ extension AttributedString {
     var isEmpty: Bool {
         self.characters.isEmpty
     }
+}
+
+extension AttributedString: Clearable {
+    static var empty: AttributedString { AttributedString("") }
 }

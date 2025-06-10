@@ -14,18 +14,15 @@ struct CardHeaderView: View {
     
     var body: some View {
         ZStack {
-            if let image = viewModel.image {
-                image
+            Rectangle()
+                .foregroundColor(.element)
+                .frame(size: sizeConstants.imageSize)
+           viewModel.image?
                     .resizable()
                     .scaledToFill()
                     .frame(size: sizeConstants.imageSize)
                     .clipped()
-            } else {
-                Rectangle()
-                    .foregroundColor(.element)
-                    .frame(size: sizeConstants.imageSize)
                 
-            }
             AlignableView(alignment: .topTrailing) {
                 TagView(
                     text: viewModel.status.title,
@@ -51,7 +48,6 @@ struct CardHeaderView: View {
             }
         }
     }
-
 }
 
 #Preview {
@@ -63,7 +59,7 @@ struct CardHeaderView: View {
                 cardSources: [],
                 imageData: UIImage(named: "testImage")?.pngData(),
                 croppedImageData: UIImage(named: "testImage")?.pngData()
-            )
+            ), mode: .view
         )
     )
     .frame(size: SizeConstants(settings: SettingsService()).imageSize)

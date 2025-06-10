@@ -9,37 +9,25 @@ import SwiftUI
 
 struct NeuTextFieldStyle: TextFieldStyle {
     @Binding var text: String
-
+    
     func _body(configuration: TextField<Self._Label>) -> some View {
-        ZStack {
-            if !text.isEmpty {
-                HStack {
-                    Spacer()
-                    Button {
-                        text = ""
-                    } label: {
-                        Image(systemName: "multiply.circle.fill")
-                            .resizable()
-                            .foregroundColor(.secondary)
-                    }
-                    .buttonStyle(NeuButtonStyle())
+        configuration
+            .lineLimit(5)
+            .padding(.leading, SizeConstants.mediumSpacing)
+            .padding(.trailing, SizeConstants.bigSpacing)
+            .padding(.vertical, SizeConstants.spacing)
+            .frame(minHeight: 36)
+            .background(
+                Color.element
+                    .shadow(.inner(color: .highlight, radius: 3, x: -3, y: -3))
+                    .shadow(.inner(color: .shadow, radius: 3, x: 3, y: 3))
+            )
+            .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
+            .overlay(alignment: .trailing) {
+                if !text.isEmpty {
+                    ClearButton(value: $text)
                 }
-                .padding(.horizontal, 4)
-                .zIndex(1)
             }
-            configuration
-                .lineLimit(5)
-                .padding(.leading, SizeConstants.mediumSpacing)
-                .padding(.trailing, SizeConstants.bigSpacing)
-                .padding(.vertical, SizeConstants.spacing)
-                .frame(minHeight: 36)
-                .background(
-                    Color.element
-                        .shadow(.inner(color: .highlight, radius: 3, x: -3, y: -3))
-                        .shadow(.inner(color: .shadow, radius: 3, x: 3, y: 3))
-                )
-                .clipShape(RoundedRectangle(cornerRadius: SizeConstants.cornerRadius))
-        }
     }
 }
 

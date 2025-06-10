@@ -15,7 +15,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject private var viewModel = ContentViewModel()
     @State private var showSetupCardView: Bool = false
-    @State private var isLoading: Bool = false
+    @State private var isLoading: Bool = true
     
     @Query private var allCards: [Card]
     @Query private var allSources: [CardSource]
@@ -39,13 +39,7 @@ struct ContentView: View {
             .overlay { ConfettiView(isPresented: $viewModel.showConfetti) }
             .overlay { SkeletonCardView(isPresented: $isLoading) }
             .onAppear {
-                if !allCards.isEmpty {
-                    isLoading = true
-                    viewModel.setCards(allCards)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                        isLoading = false
-                    }
-                }
+                !allCards.isEmpty ? setCards() : (isLoading = false)
             }
             .onDisappear {
                 viewModel.showConfetti = false
@@ -55,7 +49,6 @@ struct ContentView: View {
                     SmallButton(image: "plus.circle.fill") { 
                         showSetupCardView = true
                     }
-
                 }
             }
             .toolbar {
@@ -74,15 +67,24 @@ struct ContentView: View {
             .sheet(isPresented: $showSetupCardView) {
                 NavigationStack {
                     SetupCardView(
-                        viewModel: SetupCardViewModel(mode: .create, sources: allSources, settings: settings),
-                        showSetupCardView: $showSetupCardView) { cardWasAdded in
-                            if cardWasAdded {
-                                viewModel.setCards(allCards)
-                            }
-                        }
-                        .modelContext(modelContext)
+                        viewModel: SetupCardViewModel(
+                            mode: .create,
+                            sources: allSources
+                        ),
+                        showSetupCardView: $showSetupCardView
+                    ) { cardWasAdded in
+                        if cardWasAdded { setCards() }
+                    }
                 }
             }
+        }
+    }
+    
+    private func setCards() {
+        isLoading = true
+        viewModel.setCards(allCards)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            isLoading = false
         }
     }
 }

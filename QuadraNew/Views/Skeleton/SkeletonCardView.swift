@@ -26,10 +26,11 @@ struct SkeletonCardView: View {
                 VStack {
                     HStack {
                         SkeletonView()
-                            .frame(width: 125, height: 38)
+                            .frame(width: 38, height: 38)
                         Spacer()
                         SkeletonView()
-                            .frame(width: 38, height: 38)
+                            .frame(width: 125, height: 38)
+                        
                     }
                     .padding(4)
                     Spacer()

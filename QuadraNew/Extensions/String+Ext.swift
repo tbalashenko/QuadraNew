@@ -8,3 +8,7 @@
 import Foundation
 
 extension String: TextRepresentable { }
+
+extension String: Clearable {
+    static var empty: String { "" }
+}

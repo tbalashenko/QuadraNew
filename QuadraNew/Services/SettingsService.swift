@@ -27,7 +27,7 @@ final class SettingsService: ObservableObject {
         }
     }
     
-    @Published var imageScale: ImageScale = {
+    @Published var imageScaleSetting: ImageScale = {
         let rawValue = UserDefaultsManager.doubleForKey(UserDefaultsKeys.imageScale) ?? ImageScale.percent100.rawValue
         return ImageScale(rawValue: rawValue) ?? .percent100
     }() {
@@ -80,7 +80,7 @@ final class SettingsService: ObservableObject {
     ) {
         self.voice = voice
         self.aspectRatio = aspectRatio
-        self.imageScale = imageScale
+        self.imageScaleSetting = imageScale
         self.showConfetti = showConfetti
         self.highlighterPalette = highlighterPalette
         self.showProgress = showProgress

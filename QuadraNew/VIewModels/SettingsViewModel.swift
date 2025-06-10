@@ -33,7 +33,7 @@ final class SettingsViewModel: ObservableObject {
     
     func setup() {
         selectedVoice = settings.voice
-        selectedImageScale = settings.imageScale
+        selectedImageScale = settings.imageScaleSetting
         showConfetti = settings.showConfetti
         sendNotifications = settings.sendNotifications
         highlighterPalette = settings.highlighterPalette

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SwipeableCardView: View {
     @Environment(\.modelContext) private var context
+    @EnvironmentObject var cardService: CardService
     
     @State private var xOffset: CGFloat = .zero
     @State private var yOffset: CGFloat = .zero
@@ -20,7 +21,7 @@ struct SwipeableCardView: View {
     @Bindable var card: Card
 
     init(card: Card, viewModel: ContentViewModel) {
-        _cardViewModel = StateObject(wrappedValue: CardViewModel(card: card))
+        _cardViewModel = StateObject(wrappedValue: CardViewModel(card: card, mode: .repetition))
         self.card = card
         self.viewModel = viewModel
     }
@@ -51,7 +52,7 @@ private extension SwipeableCardView {
             xOffset = 500
             degrees = 12
         } completion: {
-            viewModel.swipeCard(context: context, card: card)
+            viewModel.swipeCard(card: card, cardService: cardService, context: context)
         }
     }
 
@@ -60,7 +61,7 @@ private extension SwipeableCardView {
             xOffset = -500
             degrees = -12
         } completion: {
-            viewModel.swipeCard(context: context, card: card)
+            viewModel.swipeCard(card: card, cardService: cardService, context: context)
         }
     }
 }

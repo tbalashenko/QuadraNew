@@ -35,23 +35,10 @@ final class ContentViewModel: ObservableObject {
         showInfoView = readyToRepeatCards.isEmpty
     }
     
-    func swipeCard(context: ModelContext, card: Card) {
+    func swipeCard(card: Card, cardService: CardService, context: ModelContext) {
         readyToRepeatCards.removeAll(where: { $0.id == card.id })
         
-        let id = card.id
-        let descriptor = FetchDescriptor<Card>(predicate: #Predicate { $0.id == id })
-        
-        if let card = try? context.fetch(descriptor).first {
-            card.repetitionCounter += 1
-            card.setNextReviewDate()
-            card.setNewStatus()
-            
-            do {
-                try context.save()
-            } catch {
-                print("Failed to save card: \(error)")
-            }
-        }
+        cardService.updateAfterReview(card, context: context)
         
         numberOfReviewedCards += 1
         showConfetti = readyToRepeatCards.isEmpty
