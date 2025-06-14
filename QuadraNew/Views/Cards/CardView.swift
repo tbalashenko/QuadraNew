@@ -26,10 +26,14 @@ struct CardView: View {
                 if viewModel.isFlippable {
                     FlippableTextView(
                         frontText: viewModel.phraseToRemember,
-                        backText: viewModel.translation
+                        backText: viewModel.translation,
+                        language: Language(viewModel.card.phraseToRememberLanguage)
                     )
                 } else {
-                    PlayableCardTitleTextView(text: viewModel.phraseToRemember)
+                    PlayableCardTitleTextView(
+                        text: viewModel.phraseToRemember,
+                        language: Language(viewModel.card.phraseToRememberLanguage)
+                    )
                 }
                 
                 if viewModel.showTranscription {
@@ -97,7 +101,9 @@ struct CardView: View {
                 cardSources: [],
                 translation: "What is your translation? What if it's longer than I expected",
                 transcription: "What is your transcription? What if it's longer than I expected",
-                croppedImageData: UIImage(named: "testImage")?.pngData()
+                phraseToRememberLanguage: "en",
+                translationLanguage: "en",
+                croppedImageData: UIImage(named: "testImage")?.pngData(),
             ),
             mode: .view
         )

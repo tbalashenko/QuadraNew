@@ -9,20 +9,51 @@ import Foundation
 import Combine
 
 final class SettingsService: ObservableObject {
-    @Published var voice: Voice = {
-        let identifier = UserDefaultsManager.stringForKey(UserDefaultsKeys.textToSpeechVoiceIdentifier) ?? Voice.englishUs0.identifier
-        return Voice(identifier: identifier)
+    @Published var languagesToStudy: [Language] = {
+        let languages = UserDefaults.standard.stringArray(forKey: UserDefaultsKeys.languagesToStudy)
+        return languages?.compactMap { Language(rawValue: $0) } ?? [.english]
     }() {
-        didSet(voice) {
-            UserDefaultsManager.saveObject(voice.identifier, forKey: UserDefaultsKeys.textToSpeechVoiceIdentifier)
+        didSet {
+            UserDefaults.standard.set(languagesToStudy.map { $0.rawValue }, forKey: UserDefaultsKeys.languagesToStudy)
         }
     }
+    
+    @Published var translationLanguage: Language = {
+        let language = UserDefaultsManager.stringForKey(UserDefaultsKeys.translationLanguage) ?? Language.english.rawValue
+        return Language(language)
+    }() {
+        didSet {
+            UserDefaults.standard.set(translationLanguage.rawValue, forKey: UserDefaultsKeys.translationLanguage)
+        }
+    }
+    
+    @Published var voices: [Language: Voice] = {
+        guard let savedDict = UserDefaults.standard.dictionary(forKey: UserDefaultsKeys.selectedVoices) as? [String: String] else { return [:] }
+            
+            var loadedVoices: [Language: Voice] = [:]
+            for (languageRaw, voiceRaw) in savedDict {
+                let language = Language(languageRaw)
+                let voice = Voice(identifier: voiceRaw)
+                
+                loadedVoices[language] = Voice(identifier: voiceRaw)
+            }
+            return loadedVoices
+    }() {
+        didSet {
+            let dictToSave = voices.reduce(into: [String: String]()) { result, pair in
+                let (language, voice) = pair
+                result[language.rawValue] = voice.identifier
+            }
+            UserDefaults.standard.set(dictToSave, forKey: UserDefaultsKeys.selectedVoices)
+        }
+    }
+
     
     @Published var aspectRatio: AspectRatio = {
         let rawValue = UserDefaultsManager.stringForKey(UserDefaultsKeys.aspectRatio) ?? AspectRatio.sixteenToNine.rawValue
         return AspectRatio(rawValue: rawValue) ?? .sixteenToNine
     }() {
-        didSet(aspectRatio) {
+        didSet {
             UserDefaultsManager.saveObject(aspectRatio.rawValue, forKey: UserDefaultsKeys.aspectRatio)
         }
     }
@@ -31,13 +62,13 @@ final class SettingsService: ObservableObject {
         let rawValue = UserDefaultsManager.doubleForKey(UserDefaultsKeys.imageScale) ?? ImageScale.percent100.rawValue
         return ImageScale(rawValue: rawValue) ?? .percent100
     }() {
-        didSet(imageScale) {
-            UserDefaultsManager.saveObject(imageScale.rawValue, forKey: UserDefaultsKeys.imageScale)
+        didSet {
+            UserDefaultsManager.saveObject(imageScaleSetting.rawValue, forKey: UserDefaultsKeys.imageScale)
         }
     }
     
     @Published var showConfetti: Bool = UserDefaultsManager.boolForKey(UserDefaultsKeys.showConfetti) ?? true {
-        didSet(showConfetti) {
+        didSet {
             UserDefaultsManager.saveObject(showConfetti, forKey: UserDefaultsKeys.showConfetti)
         }
     }
@@ -46,44 +77,26 @@ final class SettingsService: ObservableObject {
         let rawValue = UserDefaultsManager.integerForKey(UserDefaultsKeys.highlighterPalette) ?? 0
         return HighlighterPalette(rawValue: rawValue) ?? .pale
     }() {
-        didSet(highlighterPalette) {
+        didSet {
             UserDefaultsManager.saveObject(highlighterPalette.rawValue, forKey: UserDefaultsKeys.highlighterPalette)
         }
     }
     
     @Published var showProgress: Bool = UserDefaultsManager.boolForKey(UserDefaultsKeys.showProgress) ?? true {
-        didSet(showProgress) {
+        didSet {
             UserDefaultsManager.saveObject(showProgress, forKey: UserDefaultsKeys.showProgress)
         }
     }
     
     @Published var reminderTime: Date =  UserDefaultsManager.dateForKey(UserDefaultsKeys.reminderTime) ?? Date() {
-        didSet(reminderTime) {
+        didSet {
             UserDefaultsManager.saveObject(reminderTime, forKey: UserDefaultsKeys.reminderTime)
         }
     }
     
     @Published var sendNotifications: Bool = UserDefaultsManager.boolForKey(UserDefaultsKeys.sendNotifications) ?? true {
-        didSet(sendNotifications) {
+        didSet {
             UserDefaultsManager.saveObject(sendNotifications, forKey: UserDefaultsKeys.sendNotifications)
         }
-    }
-
-    func save(
-        voice: Voice,
-        aspectRatio: AspectRatio,
-        imageScale: ImageScale,
-        showConfetti: Bool,
-        highlighterPalette: HighlighterPalette,
-        showProgress: Bool,
-        sendNotifications: Bool
-    ) {
-        self.voice = voice
-        self.aspectRatio = aspectRatio
-        self.imageScaleSetting = imageScale
-        self.showConfetti = showConfetti
-        self.highlighterPalette = highlighterPalette
-        self.showProgress = showProgress
-        self.sendNotifications = sendNotifications
     }
 }

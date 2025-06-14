@@ -29,11 +29,14 @@ final class SetupCardViewModel: ObservableObject {
     @Published var isTranscriptionValid: Bool = false
     @Published var transcriptionError = ""
     
+    @Published var phraseToRememberLanguage: Language = .english
+    @Published var translationLanguage: Language = .english
+    
     @Published var newSourceText = ""
     @Published var sourceColor = Color.morningBlue
     
     @Published var sources: [CardSource] = []
-    @Published var tagCloudItems: [TagCloudItem] = []
+    @Published var sourcesTagCloudItems: [TagCloudItem] = []
     @Published var selectedSources = [CardSource]()
     
     let mode: SetupCardViewMode
@@ -65,6 +68,11 @@ final class SetupCardViewModel: ObservableObject {
             }
             self.transcription = card.transcription ?? ""
             
+            self.phraseToRememberLanguage = Language(card.phraseToRememberLanguage)
+            if let translationLanguage = card.translationLanguage {
+                self.translationLanguage = Language(translationLanguage)
+            }
+            
             let image = card.imageData.flatMap { UIImage(data: $0) }.map { Image(uiImage: $0) }
             let croppedImage = card.croppedImageData.flatMap { UIImage(data: $0) }.map { Image(uiImage: $0) }
             
@@ -72,7 +80,7 @@ final class SetupCardViewModel: ObservableObject {
             self.image = image
             
             self.selectedSources = card.cardSources ?? []
-            updateTagCloudItems()
+            updateSourceTagCloudItems()
         }
     }
     

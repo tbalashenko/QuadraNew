@@ -11,11 +11,15 @@ import SwiftUI
 struct PlayableCardTitleTextView: View {
     @EnvironmentObject var settings: SettingsService
     let text: AttributedString
+    let language: Language
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
-            TextToSpeechPlayView(viewModel: TextToSpeechViewModel(settings: settings), text: String(text.characters))
-                .environmentObject(settings)
+            TextToSpeechPlayView(
+                viewModel: TextToSpeechViewModel(settings: settings),
+                text: String(text.characters),
+                language: language
+            )
             Text(text)
                 .font(.title2)
                 .bold()
@@ -28,5 +32,5 @@ struct PlayableCardTitleTextView: View {
 }
 
 #Preview {
-    PlayableCardTitleTextView(text: "Long, long text")
+    PlayableCardTitleTextView(text: "Long, long text", language: .english)
 }

@@ -110,7 +110,7 @@ extension SetupCardViewModel {
     private func setupNewSourceText() {
         $newSourceText
             .sink { [weak self] _ in
-                self?.updateTagCloudItems()
+                self?.updateSourceTagCloudItems()
             }
             .store(in: &cancellables)
     }
@@ -160,8 +160,8 @@ extension SetupCardViewModel {
         selectedSources.contains(source) ? selectedSources.removeAll { $0.id == source.id } : selectedSources.append(source)
     }
     
-    func updateTagCloudItems() {
-        tagCloudItems = sources
+    func updateSourceTagCloudItems() {
+        sourcesTagCloudItems = sources
             .filter { newSourceText.isEmpty ? true : $0.title.localizedCaseInsensitiveContains(newSourceText) }
             .map { source in
                 TagCloudItem(
@@ -222,6 +222,8 @@ extension SetupCardViewModel {
             phrase: phraseToRemember,
             translation: translation,
             transcription: transcription,
+            phraseToRememberLanguage: phraseToRememberLanguage.rawValue,
+            translationLanguage: translationLanguage.rawValue,
             sources: selectedSources,
             imageData: imageData,
             croppedImageData: croppedData

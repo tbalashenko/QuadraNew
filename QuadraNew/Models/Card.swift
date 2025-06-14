@@ -27,6 +27,8 @@ final class Card {
     @Attribute(.transformable(by: "AttributedStringTransformer"))
     var translation: NSAttributedString?
     var transcription: String?
+    var phraseToRememberLanguage: String
+    var translationLanguage: String?
     
     @Attribute(.externalStorage)
     var imageData: Data?
@@ -45,6 +47,8 @@ final class Card {
         cardSources: [CardSource],
         translation: AttributedString? = nil,
         transcription: String? = nil,
+        phraseToRememberLanguage: String,
+        translationLanguage: String?,
         imageData: Data? = nil,
         croppedImageData: Data? = nil
     ) {
@@ -55,6 +59,8 @@ final class Card {
             self.translation = NSAttributedString(translation)
         }
         self.transcription = transcription
+        self.phraseToRememberLanguage = phraseToRememberLanguage
+        self.translationLanguage = translationLanguage
         self.imageData = imageData
         self.croppedImageData = croppedImageData
         self.cardSources = cardSources

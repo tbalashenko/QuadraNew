@@ -14,9 +14,10 @@ struct FlippableTextView: View {
     
     let frontText: AttributedString
     let backText: AttributedString
-
+    let language: Language
+    
     var body: some View {
-        PlayableCardTitleTextView(text: isFlipped ? backText : frontText)
+        PlayableCardTitleTextView(text: isFlipped ? backText : frontText, language: language)
             .background(Color.element)
             .rotation3DEffect(.degrees(contentRotation), axis: (x: 0, y: 1, z: 0))
             .rotation3DEffect(.degrees(flashcardRotation), axis: (x: 0, y: 1, z: 0))
@@ -24,7 +25,7 @@ struct FlippableTextView: View {
                 flipFlashcard()
             }
     }
-
+    
     private func flipFlashcard(animationTime: Double = 0.5) {
         withAnimation(Animation.linear(duration: animationTime)) {
             flashcardRotation += 180

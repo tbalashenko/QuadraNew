@@ -25,9 +25,7 @@ struct ImageSettingsView: View {
         }
         .pickerStyle(.menu)
 
-        Text(TextConstants.preferableImageQualityHelp)
-            .foregroundColor(.secondary)
-            .font(.footnote)
+        FootnoteText(text: TextConstants.preferableImageQualityHelp)
     }
 }
 

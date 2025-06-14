@@ -16,6 +16,8 @@ final class CardService: ObservableObject {
             cardSources: input.sources,
             translation: input.translation,
             transcription: input.transcription,
+            phraseToRememberLanguage: input.phraseToRememberLanguage,
+            translationLanguage: input.translationLanguage,
             imageData: input.imageData,
             croppedImageData: input.croppedImageData
         )

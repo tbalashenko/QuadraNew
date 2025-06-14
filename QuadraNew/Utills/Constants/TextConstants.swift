@@ -10,7 +10,7 @@ import Foundation
 struct TextConstants {
     static let imageUrl = "Image URL"
     static let addImageUrl = "Add image URL"
-    static let phraseToRemember = "Phrase to remember*"
+    static let phraseToRemember = "Phrase to remember"
     static let addPhrase = "Add a new phrase"
     static let translation = "Translation"
     static let addTranslation = "Add it's translation"
@@ -32,7 +32,8 @@ struct TextConstants {
     static let manageSources = "Manage Sources"
     static let textFormatting = "Text Formatting"
     static let notifications = "Notifications"
-    static let voice = "Voice"
+    static let voices = "Voices"
+    static let languages = "Languages"
     static let sampleText = "Sample Text"
     static let preferableAspectRatio = "Preferable Aspect Ratio"
     static let preferableImageQuality = "Preferable Image Quality"
@@ -41,6 +42,8 @@ struct TextConstants {
     static let preferableHighlighterPalette = "Preferable Highlighter Palette"
     static let closeWithoutSavingHelp = "Are you sure you want to close the window without saving?"
     static let period = "Period"
+    static let selectLanguagesToStudy = "Select the languages you want to learn"
+    static let selectTranslationLanguage = "Select the language you will use for translations"
     
     static let addFirstCards = "1. Tap the plus button \n to add your first cards."
     static let readThem = "2. Read every phrase aloud \n to make it stick."
@@ -77,6 +80,8 @@ struct TextConstants {
     static let addCard = "Add a new card"
     static let editCard = "Edit your card"
     static let aboutApp = "About Quadra"
+    static let selectLanguages = "Select languages"
+    static let selectLanguage = "Select language"
     
     // Buttons
     static let reset = "Reset"

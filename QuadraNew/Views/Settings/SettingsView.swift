@@ -21,7 +21,28 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Group {
-                    Section(TextConstants.languageAndVoice) {
+                    Section(TextConstants.languages) {
+                        NavigationLink(TextConstants.selectLanguages) {
+                            MultiselectablePickerView(
+                                selectedItems: $viewModel.languagesToStudy,
+                                withMultipleSelection: true,
+                                navigationTitle: TextConstants.selectLanguages,
+                                getTitle: { "\($0.flagEmoji) \($0.title)" }
+                            )
+                        }
+                        FootnoteText(text: TextConstants.selectLanguagesToStudy)
+                        
+                        NavigationLink(TextConstants.selectLanguage) {
+                            MultiselectablePickerView(
+                                selectedItems: $viewModel.translationLanguage,
+                                withMultipleSelection: false,
+                                navigationTitle: TextConstants.selectLanguage,
+                                getTitle: { "\($0.flagEmoji) \($0.title)" }
+                            )
+                        }
+                        FootnoteText(text: TextConstants.selectTranslationLanguage)
+                    }
+                    Section(TextConstants.voices) {
                         VoicePickerView(viewModel: viewModel)
                     }
                     Section(TextConstants.images) {
@@ -59,9 +80,9 @@ struct SettingsView: View {
             .onAppear {
                 viewModel.checkNotificationPermission()
             }
-            .onDisappear {
-                viewModel.setup()
-            }
+//            .onDisappear {
+//                viewModel.setup()
+//            }
             .toolbar(.hidden, for: .tabBar)
             .navigationBarTitle(TextConstants.settings)
         }

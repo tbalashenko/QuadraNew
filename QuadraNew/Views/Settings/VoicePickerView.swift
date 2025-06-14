@@ -10,27 +10,40 @@ import SwiftUI
 struct VoicePickerView: View {
     @EnvironmentObject var settings: SettingsService
     @ObservedObject var viewModel: SettingsViewModel
-
+    
     var body: some View {
-        Picker(TextConstants.voice, selection: $viewModel.selectedVoice) {
-            ForEach(Voice.allVoices.sorted(by: { $0.language < $1.language }), id: \.self) { voice in
-                Text(voice.language) + Text(" - ") + Text(voice.name)
-            }
-        }
-        .pickerStyle(.menu)
-        LabeledContent(TextConstants.sampleText) {
-            HStack {
-                Text(viewModel.selectedVoice.samplePhrase)
-                TextToSpeechPlayView(
-                    viewModel: TextToSpeechViewModel(settings: settings),
-                    text: viewModel.selectedVoice.samplePhrase,
-                    voice: viewModel.selectedVoice
-                )
+        ForEach(viewModel.languagesToStudy.filter { $0.voices?.isEmpty == false }) { language in
+            if let voices = language.voices {
+                Picker(
+                    language.title,
+                    selection: Binding(
+                        get: { viewModel.selectedVoices[language] ?? voices.first! },
+                        set: { viewModel.selectedVoices[language] = $0 }
+                    )) {
+                        ForEach(voices, id: \.self) { voice in
+                            Text((voice.name))
+                                .tag(voice)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                LabeledContent(TextConstants.sampleText) {
+                    HStack {
+                        Text(language.samplePhrase)
+                        if let voice = viewModel.selectedVoices[language] {
+                            TextToSpeechPlayView(
+                                viewModel: TextToSpeechViewModel(settings: settings),
+                                text: language.samplePhrase,
+                                language: language,
+                                voice: voice
+                            )
+                        }
+                    }
+                }
             }
         }
     }
 }
 
 #Preview {
-    VoicePickerView(viewModel: SettingsViewModel(settings: SettingsService()))
+    //VoicePickerView(viewModel: SettingsViewModel(settings: SettingsService()))
 }

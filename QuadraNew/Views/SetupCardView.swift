@@ -80,13 +80,22 @@ struct SetupCardView: View {
     }
     
     private var phraseToRemember: some View {
-        HighlightableTextView(
-            text: $viewModel.phraseToRemember,
-            placeholder: TextConstants.addPhrase,
-            error: viewModel.phraseToRememberError
-        ) {
-            viewModel.formatAndSetPhrase($0, string: &viewModel.phraseToRemember)
-            showPopup = true
+        VStack {
+            HighlightableTextView(
+                text: $viewModel.phraseToRemember,
+                placeholder: TextConstants.addPhrase,
+                error: viewModel.phraseToRememberError
+            ) {
+                viewModel.formatAndSetPhrase($0, string: &viewModel.phraseToRemember)
+                showPopup = true
+            }
+            Picker("", selection: $viewModel.phraseToRememberLanguage) {
+                ForEach(settings.languagesToStudy) { language in
+                    Text(language.flagEmoji)
+                        .tag(language)
+                }
+            }
+            .pickerStyle(.segmented)
         }
     }
     
@@ -118,7 +127,7 @@ struct SetupCardView: View {
     private var sources: some View {
         Group {
             AddNewSourceView(viewModel: viewModel)
-            TagCloudView(viewModel: TagCloudViewModel(items: viewModel.tagCloudItems, isSelectable: true))
+            TagCloudView(viewModel: TagCloudViewModel(items: viewModel.sourcesTagCloudItems, isSelectable: true))
         }
     }
     

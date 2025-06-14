@@ -53,4 +53,7 @@ struct UserDefaultsKeys {
     static let showProgress = "showProgress"
     static let sendNotifications = "sendNotifications"
     static let reminderTime = "reminderTime"
+    static let languagesToStudy = "languagesToStudy"
+    static let translationLanguage = "translationLanguage"
+    static let selectedVoices = "selectedVoices"
 }

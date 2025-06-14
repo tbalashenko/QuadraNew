@@ -9,7 +9,9 @@ import Foundation
 import Combine
 
 final class SettingsViewModel: ObservableObject {
-    @Published var selectedVoice: Voice = .englishUs0
+    @Published var languagesToStudy = [Language]()
+    @Published var translationLanguage = [Language]()
+    @Published var selectedVoices: [Language: Voice] = [:]
     @Published var selectedRatio: AspectRatio = .sixteenToNine
     @Published var selectedImageScale: ImageScale = .percent100
     @Published var showConfetti: Bool = true
@@ -32,7 +34,9 @@ final class SettingsViewModel: ObservableObject {
     }
     
     func setup() {
-        selectedVoice = settings.voice
+        languagesToStudy = settings.languagesToStudy
+        translationLanguage = [settings.translationLanguage]
+        selectedVoices = settings.voices
         selectedImageScale = settings.imageScaleSetting
         showConfetti = settings.showConfetti
         sendNotifications = settings.sendNotifications
@@ -43,15 +47,24 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func save() {
-        settings.save(
-            voice: selectedVoice,
-            aspectRatio: selectedRatio,
-            imageScale: selectedImageScale,
-            showConfetti: showConfetti,
-            highlighterPalette: highlighterPalette,
-            showProgress: showProgress,
-            sendNotifications: sendNotifications
-        )
+        settings.languagesToStudy = languagesToStudy
+        if let translationLanguage = translationLanguage.first {
+            settings.translationLanguage = translationLanguage
+        }
+        
+        for language in languagesToStudy {
+            if selectedVoices[language] == nil, let defaultVoice = language.voices?.first {
+                selectedVoices[language] = defaultVoice
+            }
+        }
+        
+        settings.voices = selectedVoices
+        settings.aspectRatio = selectedRatio
+        settings.imageScaleSetting = selectedImageScale
+        settings.showConfetti = showConfetti
+        settings.highlighterPalette = highlighterPalette
+        settings.showProgress = showProgress
+        settings.sendNotifications = sendNotifications
         
         if needSetupNotifications {
             NotificationsService.shared.scheduleNotifications(time: reminderTime)

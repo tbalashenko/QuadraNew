@@ -12,19 +12,27 @@ struct TextToSpeechPlayView: View {
     @StateObject var viewModel: TextToSpeechViewModel
     var buttonSize: Size = .small
     var text: String
+    var language: Language
     var voice: Voice? = nil
     
-    init(viewModel: TextToSpeechViewModel, buttonSize: Size = .small, text: String, voice: Voice? = nil) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-        self.buttonSize = buttonSize
-        self.text = text
-        self.voice = voice
-    }
+    init(
+        viewModel: TextToSpeechViewModel,
+        text: String,
+        language: Language,
+        buttonSize: Size = .small,
+        voice: Voice? = nil) {
+            _viewModel = StateObject(wrappedValue: viewModel)
+            self.buttonSize = buttonSize
+            self.text = text
+            self.voice = voice
+            self.language = language
+        }
 
     var body: some View {
         SmallButton(image: viewModel.isSpeaking ? "stop.circle" : "play.circle") {
             viewModel.speak(
                 text: text,
+                language: language,
                 voice: voice
             )
         }

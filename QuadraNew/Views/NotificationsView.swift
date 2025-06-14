@@ -21,9 +21,7 @@ struct NotificationsView: View {
                 .datePickerStyle(.wheel)
             
         }
-        Text(TextConstants.dontMissOut)
-            .foregroundColor(.secondary)
-            .font(.footnote)
+        FootnoteText(text: TextConstants.dontMissOut)
     }
 }
 

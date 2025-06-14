@@ -27,9 +27,8 @@ struct SamplePhrasesView: View {
                                 showCopiedPopup = true
                             }
                         )
-                        Text(TextConstants.enterExpression)
-                            .foregroundColor(.secondary)
-                            .font(.footnote)
+                        
+                        FootnoteText(text: TextConstants.enterExpression)
                         
                         if viewModel.showError {
                             Text(TextConstants.noSamplePhrases)

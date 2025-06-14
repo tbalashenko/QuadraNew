@@ -17,14 +17,15 @@ class TextToSpeechViewModel: NSObject, ObservableObject {
         self.settings = settings
     }
 
-    func speak(text: String, voice: Voice? = nil) {
+    func speak(text: String, language: Language, voice: Voice? = nil) {
         guard !synthesizer.isSpeaking else {
             stopSpeaking()
             return
         }
         
         let utterance = AVSpeechUtterance(string: text)
-        let voice = voice ?? settings.voice
+        
+        guard let voice = voice ?? settings.voices[language] else { return }
         
         utterance.voice = AVSpeechSynthesisVoice(identifier: voice.identifier)
         synthesizer.delegate = self
