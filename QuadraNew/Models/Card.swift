@@ -25,10 +25,11 @@ final class Card {
     @Attribute(.transformable(by: "AttributedStringTransformer"))
     var phraseToRemember: NSAttributedString
     @Attribute(.transformable(by: "AttributedStringTransformer"))
-    var translation: NSAttributedString?
+    var translation: NSAttributedString
+    @Attribute(.transformable(by: "AttributedStringTransformer"))
+    var definition: NSAttributedString?
     var transcription: String?
-    var phraseToRememberLanguage: String
-    var translationLanguage: String?
+    var phraseToRememberLanguage: String?
     
     @Attribute(.externalStorage)
     var imageData: Data?
@@ -43,24 +44,24 @@ final class Card {
     
     init(
         phraseToRemember: AttributedString,
+        translation: AttributedString,
         archiveTag: ArchiveTag,
         cardSources: [CardSource],
-        translation: AttributedString? = nil,
+        definition: AttributedString? = nil,
         transcription: String? = nil,
-        phraseToRememberLanguage: String,
-        translationLanguage: String?,
+        phraseToRememberLanguage: String?,
         imageData: Data? = nil,
         croppedImageData: Data? = nil
     ) {
         self.archiveTag = archiveTag
         
         self.phraseToRemember = NSAttributedString(phraseToRemember)
-        if let translation {
-            self.translation = NSAttributedString(translation)
+        self.translation = NSAttributedString(translation)
+        if let definition = definition {
+            self.definition = NSAttributedString(definition)
         }
         self.transcription = transcription
         self.phraseToRememberLanguage = phraseToRememberLanguage
-        self.translationLanguage = translationLanguage
         self.imageData = imageData
         self.croppedImageData = croppedImageData
         self.cardSources = cardSources

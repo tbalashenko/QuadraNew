@@ -26,11 +26,14 @@ final class SetupCardViewModel: ObservableObject {
     @Published var translationError = ""
     
     @Published var transcription = ""
-    @Published var isTranscriptionValid: Bool = false
+    @Published var isTranscriptionValid: Bool = true
     @Published var transcriptionError = ""
     
-    @Published var phraseToRememberLanguage: Language = .english
-    @Published var translationLanguage: Language = .english
+    @Published var definition: AttributedString = ""
+    @Published var isDefinitionValid: Bool = true
+    @Published var definitionError = ""
+    
+    @Published var phraseToRememberLanguage: Language? = nil
     
     @Published var newSourceText = ""
     @Published var sourceColor = Color.morningBlue
@@ -46,8 +49,13 @@ final class SetupCardViewModel: ObservableObject {
     
     var wasChanged: Bool { !phraseToRemember.isEmpty }
     
-    var isSaveButtonDisabled: Bool {
-        phraseToRemember.isEmpty || !translationError.isEmpty && !transcriptionError.isEmpty
+    var isSaveButtonEnabled: Bool {
+        !phraseToRemember.isEmpty &&
+        !translation.isEmpty &&
+        isPhraseToRememberValid &&
+        isTranslationValid &&
+        isTranscriptionValid &&
+        isDefinitionValid
     }
     
     init(
@@ -63,14 +71,14 @@ final class SetupCardViewModel: ObservableObject {
         if let card {
             self.card = card
             self.phraseToRemember = AttributedString(card.phraseToRemember)
-            if let translation = card.translation {
-                self.translation = AttributedString(translation)
-            }
+            self.translation = AttributedString(card.translation)
             self.transcription = card.transcription ?? ""
+            if let definition = card.definition {
+                self.definition = AttributedString(definition)
+            }
             
-            self.phraseToRememberLanguage = Language(card.phraseToRememberLanguage)
-            if let translationLanguage = card.translationLanguage {
-                self.translationLanguage = Language(translationLanguage)
+            if let phraseToRememberLanguage = card.phraseToRememberLanguage {
+                self.phraseToRememberLanguage = Language(rawValue: phraseToRememberLanguage)
             }
             
             let image = card.imageData.flatMap { UIImage(data: $0) }.map { Image(uiImage: $0) }
@@ -84,7 +92,7 @@ final class SetupCardViewModel: ObservableObject {
         }
     }
     
-    func saveCard(context: ModelContext, cardService: CardService, settings: SettingsService) async {
+    func saveCard(context: ModelContext, cardService: CardService, settings: SettingsService, filterService: FilterService) async {
         do {
             let input = makeCardInput(settings: settings)
             
@@ -96,7 +104,7 @@ final class SetupCardViewModel: ObservableObject {
                 try cardService.updateCard(existingCard, with: input, context: context)
             }
             
-            FilterService.shared.reset()
+            filterService.reset()
         } catch {
             print("Failed to save card: \(error.localizedDescription)")
         }

@@ -11,7 +11,6 @@ import SwiftData
 
 struct AddNewSourceView: View {
     @Environment(\.modelContext) private var context
-    
     @ObservedObject var viewModel: SetupCardViewModel
     
     var body: some View {

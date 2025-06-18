@@ -7,163 +7,216 @@
 
 import Foundation
 
-struct Voice {
-    var id: UUID = UUID()
-    var code: String
-    var language: String
-    var name: String
-    var identifier: String
-    var samplePhrase: String
-
-    init(
-        code: String,
-        language: String,
-        name: String,
-        identifier: String,
-        samplePhrase: String
-    ) {
-        self.code = code
-        self.language = language
-        self.name = name
-        self.identifier = identifier
-        self.samplePhrase = samplePhrase
+enum Voice: String, CaseIterable, Hashable {
+    case czech, danish, greek
+    case german
+    case englishAu
+    case englishGb
+    case englishIr
+    case englishUs0, englishUs1
+    case spanishSp, spanishMx
+    case finnish
+    case frenchCa, frenchFr
+    case hebrew, hindi, hungarian, indonesian
+    case italian
+    case japanese
+    case korean
+    case dutchBe, dutchNl
+    case norwegian, polish
+    case portugueseBr, portuguesePt
+    case romanian, russian, slovak, swedish, thai, turkish
+    case chineseCn, chineseHk, chineseTw
+    
+    var code: String {
+        switch self {
+            case .czech: "cs-CZ"
+            case .danish: "da-DK"
+            case .greek: "el-GR"
+            case .german: "de-DE"
+            case .englishAu: "en-AU"
+            case .englishGb: "en-GB"
+            case .englishIr: "en-IE"
+            case .englishUs0, .englishUs1: "en-US"
+            case .spanishSp: "es-ES"
+            case .spanishMx: "es-MX"
+            case .finnish: "fi-FI"
+            case .frenchCa: "fr-CA"
+            case .frenchFr: "fr-FR"
+            case .hebrew: "he-IL"
+            case .hindi: "hi-IN"
+            case .hungarian: "hu-HU"
+            case .indonesian: "id-ID"
+            case .italian: "it-IT"
+            case .japanese: "ja-JP"
+            case .korean: "ko-KR"
+            case .dutchBe: "nl-BE"
+            case .dutchNl: "nl-NL"
+            case .norwegian: "no-NO"
+            case .polish: "pl-PL"
+            case .portugueseBr: "pt-BR"
+            case .portuguesePt: "pt-PT"
+            case .romanian: "ro-RO"
+            case .russian: "ru-RU"
+            case .slovak: "sk-SK"
+            case .swedish: "sv-SE"
+            case .thai: "th-TH"
+            case .turkish: "tr-TR"
+            case .chineseCn: "zh-CN"
+            case .chineseHk: "zh-HK"
+            case .chineseTw: "zh-TW"
+        }
     }
-
-    init(identifier: String) {
-        if let voice = Voice.voiceDictionary[identifier] {
-            self = voice
-        } else {
-            self = .englishUs0
+    
+    var language: String {
+        switch self {
+            case .czech: "Chech"
+            case .danish: "Danish"
+            case .greek: "Greek"
+            case .german: "German"
+            case .englishAu: "English (Australia)"
+            case .englishGb: "English (UK)"
+            case .englishIr: "English (Ireland)"
+            case .englishUs0, .englishUs1: "English (US)"
+            case .spanishSp: "Spanish (Spain)"
+            case .spanishMx: "Spanish (Mexico)"
+            case .finnish: "Finnish"
+            case .frenchCa: "French (Canada)"
+            case .frenchFr: "French (France)"
+            case .hebrew: "Hebrew"
+            case .hindi: "Hindi"
+            case .hungarian: "Hungarian"
+            case .indonesian: "Indonesian"
+            case .italian: "Italian"
+            case .japanese: "Japanese"
+            case .korean: "Korean"
+            case .dutchBe: "Dutch (Belgium)"
+            case .dutchNl: "Dutch (Netherlands)"
+            case .norwegian: "Norwegian"
+            case .polish: "Polish"
+            case .portugueseBr: "Portuguese (Brazil)"
+            case .portuguesePt: "Portuguese (Portugal)"
+            case .romanian: "Romanian"
+            case .russian: "Russian"
+            case .slovak: "Slovak"
+            case .swedish: "Swedish"
+            case .thai: "Thai"
+            case .turkish: "Turkish"
+            case .chineseCn: "Chinese (China)"
+            case .chineseHk: "Chinese (Hong Kong)"
+            case .chineseTw: "Chinese (Taiwan)"
+        }
+    }
+    
+    var name: String {
+        switch self {
+            case .czech: "Zuzana"
+            case .danish: "Sara"
+            case .greek: "Melina"
+            case .german: "Anna"
+            case .englishAu: "Karen (Australia)"
+            case .englishGb: "Daniel (UK)"
+            case .englishIr: "Moira (Ireland)"
+            case .englishUs0: "Samantha (US)"
+            case .englishUs1: "Fred (US)"
+            case .spanishSp: "Mónica (Spain)"
+            case .spanishMx: "Paulina (Mexico)"
+            case .finnish: "Satu"
+            case .frenchCa: "Amélie (Canada)"
+            case .frenchFr: "Thomas (France)"
+            case .hebrew: "Carmit"
+            case .hindi: "Lekha"
+            case .hungarian: "Mariska"
+            case .indonesian: "Damayanti"
+            case .italian: "Alice"
+            case .japanese: "Kyoko"
+            case .korean: "Yuna"
+            case .dutchBe: "Ellen (Belgium)"
+            case .dutchNl: "Xander (Netherlands)"
+            case .norwegian: "Nora"
+            case .polish: "Zosia"
+            case .portugueseBr: "Luciana (Brazil)"
+            case .portuguesePt: "Joana (Portugal)"
+            case .romanian: "Ioana"
+            case .russian: "Milena"
+            case .slovak: "Laura"
+            case .swedish: "Alva"
+            case .thai: "Kanya"
+            case .turkish: "Yelda"
+            case .chineseCn: "Tingting (China)"
+            case .chineseHk: "Sinji (Hong Kong)"
+            case .chineseTw: "Meijia (Taiwan)"
+        }
+    }
+    
+    var identifier: String {
+        switch self {
+            case .czech: "com.apple.voice.compact.cs-CZ.Zuzana"
+            case .danish: "com.apple.voice.compact.da-DK.Sara"
+            case .greek: "com.apple.voice.compact.el-GR.Melina"
+            case .german: "com.apple.voice.compact.de-DE.Anna"
+            case .englishAu: "com.apple.voice.compact.en-AU.Karen"
+            case .englishGb: "com.apple.voice.compact.en-GB.Daniel"
+            case .englishIr: "com.apple.voice.compact.en-IE.Moira"
+            case .englishUs0: "com.apple.voice.compact.en-US.Samantha"
+            case .englishUs1: "com.apple.speech.synthesis.voice.Fred"
+            case .spanishSp: "com.apple.voice.compact.es-ES.Monica"
+            case .spanishMx: "com.apple.voice.compact.es-MX.Paulina"
+            case .finnish: "com.apple.voice.compact.fi-FI.Satu"
+            case .frenchCa: "com.apple.voice.compact.fr-CA.Amelie"
+            case .frenchFr: "com.apple.voice.compact.fr-FR.Thomas"
+            case .hebrew: "com.apple.voice.compact.he-IL.Carmit"
+            case .hindi: "com.apple.voice.compact.hi-IN.Lekha"
+            case .hungarian: "com.apple.voice.compact.hu-HU.Mariska"
+            case .indonesian: "com.apple.voice.compact.id-ID.Damayanti"
+            case .italian: "com.apple.voice.compact.it-IT.Alice"
+            case .japanese: "com.apple.voice.compact.ja-JP.Kyoko"
+            case .korean: "com.apple.voice.compact.ko-KR.Yuna"
+            case .dutchBe: "com.apple.voice.compact.nl-BE.Ellen"
+            case .dutchNl: "com.apple.voice.compact.nl-NL.Xander"
+            case .norwegian: "com.apple.voice.compact.nb-NO.Nora"
+            case .polish: "com.apple.voice.compact.pl-PL.Zosia"
+            case .portugueseBr: "com.apple.voice.compact.pt-BR.Luciana"
+            case .portuguesePt: "com.apple.voice.compact.pt-PT.Joana"
+            case .romanian: "com.apple.voice.compact.ro-RO.Ioana"
+            case .russian: "com.apple.voice.compact.ru-RU.Milena"
+            case .slovak: "com.apple.voice.compact.sk-SK.Laura"
+            case .swedish: "com.apple.voice.compact.sv-SE.Alva"
+            case .thai: "com.apple.voice.compact.th-TH.Kanya"
+            case .turkish: "com.apple.voice.compact.tr-TR.Yelda"
+            case .chineseCn: "com.apple.voice.compact.zh-CN.Tingting"
+            case .chineseHk: "com.apple.voice.compact.zh-HK.Sinji"
+            case .chineseTw: "com.apple.voice.compact.zh-TW.Meijia"
+        }
+    }
+    
+    var samplePhrase: String {
+        switch self {
+            case .czech: "Ahoj, Světe!"
+            case .danish: "Hej, Verden!"
+            case .greek: "Γεια σου, κόσμε!"
+            case .german: "Hallo, Welt!"
+            case .englishAu, .englishGb, .englishIr, .englishUs0, .englishUs1: "Hello, World!"
+            case .spanishSp, .spanishMx: "¡Hola, mundo!"
+            case .finnish: "Hei, maailma!"
+            case .frenchCa, .frenchFr: "Bonjour, le monde!"
+            case .hebrew: "שלום, עולם!"
+            case .hindi: "नमस्ते, दुनिया!"
+            case .hungarian: "Helló, Világ!"
+            case .indonesian: "Halo, Dunia!"
+            case .italian: "Ciao, Mondo!"
+            case .japanese: "こんにちは、世界!"
+            case .korean: "안녕하세요, 세상!"
+            case .dutchBe, .dutchNl: "Hallo, wereld!"
+            case .norwegian: "Hei, verden!"
+            case .polish: "Cześć, Świecie!"
+            case .portugueseBr, .portuguesePt: "Olá, mundo!"
+            case .romanian: "Salut, lume!"
+            case .russian: "Привет, мир!"
+            case .slovak: "Ahoj, svet!"
+            case .swedish: "Hej, världen!"
+            case .thai: "สวัสดี, โลก!"
+            case .turkish: "Merhaba, dünya!"
+            case .chineseCn, .chineseHk, .chineseTw: "你好，世界!"
         }
     }
 }
-
-extension Voice {
-    static let allVoices: [Voice] = [
-        .chech,
-        .danish,
-        .greek,
-        .german0,
-        .german1,
-        .german2,
-        .englishAu0,
-        .englishAu1,
-        .englishAu2,
-        .englishGb0,
-        .englishGb1,
-        .englishGb2,
-        .englishIr,
-        .englishUs0,
-        .englishUs1,
-        .englishUs2,
-        .englishUs3,
-        .spanishSp,
-        .spanishMx,
-        .finnish,
-        .frenchCa,
-        .frenchFr0,
-        .frenchFr1,
-        .frenchFr2,
-        .hebrew,
-        .hindi,
-        .hungarian,
-        .indonesian,
-        .italian,
-        .japanese0,
-        .japanese1,
-        .japanese2,
-        .korean,
-        .dutchBe,
-        .dutchNl,
-        .norwegian,
-        .polish,
-        .portugueseBr,
-        .portuguesePt,
-        .romanian,
-        .russian,
-        .slovak,
-        .swedish,
-        .thai,
-        .turkish,
-        .chineseCn0,
-        .chineseCn1,
-        .chineseCn2,
-        .chineseHk,
-        .chineseTw
-    ]
-
-    static let voiceDictionary: [String: Voice] = Dictionary(uniqueKeysWithValues: allVoices.map { ($0.identifier, $0) })
-}
-
-extension Voice {
-    static let chech = Voice(code: "cs-CZ", language: "Chech", name: "Zuzana", identifier: "com.apple.ttsbundle.Zuzana-compact", samplePhrase: "Ahoj, Světe!")
-    static let danish = Voice(code: "da-DK", language: "Danish", name: "Sara", identifier: "com.apple.ttsbundle.Sara-compact", samplePhrase: "Hej, Verden!")
-    static let greek = Voice(code: "el-GR", language: "Greek", name: "Melina", identifier: "com.apple.ttsbundle.Melina-compact", samplePhrase: "Γεια σου, κόσμε!")
-
-    static let german0 = Voice(code: "de-DE", language: "German", name: "Anna", identifier: "com.apple.ttsbundle.Anna-compact", samplePhrase: "Hallo, Welt!")
-    static let german1 = Voice(code: "de-DE", language: "German", name: "Helena", identifier: "com.apple.ttsbundle.siri_female_de-DE_compact", samplePhrase: "Hallo, Welt!")
-    static let german2 = Voice(code: "de-DE", language: "German", name: "Martin", identifier: "com.apple.ttsbundle.siri_male_de-DE_compact", samplePhrase: "Hallo, Welt!")
-
-    static let englishAu0 = Voice(code: "en-AU", language: "English (Australia)", name: "Catherine", identifier: "com.apple.ttsbundle.siri_female_en-AU_compact", samplePhrase: "Hello, World!")
-    static let englishAu1 = Voice(code: "en-AU", language: "English (Australia)", name: "Gordon", identifier: "com.apple.ttsbundle.siri_male_en-AU_compact", samplePhrase: "Hello, World!")
-    static let englishAu2 = Voice(code: "en-AU", language: "English (Australia)", name: "Karen", identifier: "com.apple.ttsbundle.Karen-compact", samplePhrase: "Hello, World!")
-
-    static let englishGb0 = Voice(code: "en-GB", language: "English (UK)", name: "Arthur", identifier: "com.apple.ttsbundle.siri_male_en-GB_compact", samplePhrase: "Hello, World!")
-    static let englishGb1 = Voice(code: "en-GB", language: "English (UK)", name: "Daniel", identifier: "com.apple.ttsbundle.Daniel-compact", samplePhrase: "Hello, World!")
-    static let englishGb2 = Voice(code: "en-GB", language: "English (UK)", name: "Martha", identifier: "com.apple.ttsbundle.siri_female_en-GB_compact", samplePhrase: "Hello, World!")
-
-    static let englishIr = Voice(code: "en-IE", language: "English (Ireland)", name: "Moira", identifier: "com.apple.ttsbundle.Moira-compact", samplePhrase: "Hello, World!")
-
-    static let englishUs0 = Voice(code: "en-US", language: "English (US)", name: "Aaron", identifier: "com.apple.ttsbundle.siri_male_en-US_compact", samplePhrase: "Hello, World!")
-    static let englishUs1 = Voice(code: "en-US", language: "English (US)", name: "Fred", identifier: "com.apple.speech.synthesis.voice.Fred", samplePhrase: "Hello, World!")
-    static let englishUs2 = Voice(code: "en-US", language: "English (US)", name: "Nicky", identifier: "com.apple.ttsbundle.siri_female_en-US_compact", samplePhrase: "Hello, World!")
-    static let englishUs3 = Voice(code: "en-US", language: "English (US)", name: "Samantha", identifier: "com.apple.ttsbundle.Samantha-compact", samplePhrase: "Hello, World!")
-
-    static let spanishSp = Voice(code: "es-ES", language: "Spanish (Spain)", name: "Mónica", identifier: "com.apple.ttsbundle.Monica-compact", samplePhrase: "¡Hola, mundo!")
-    static let spanishMx = Voice(code: "es-MX", language: "Spanish (Mexico)", name: "Paulina", identifier: "com.apple.ttsbundle.Paulina-compact", samplePhrase: "¡Hola, mundo!")
-
-    static let finnish = Voice(code: "fi-FI", language: "Finnish", name: "Satu", identifier: "com.apple.ttsbundle.Satu-compact", samplePhrase: "Hei, maailma!")
-
-    static let frenchCa = Voice(code: "fr-CA", language: "French (Canada)", name: "Amélie", identifier: "com.apple.ttsbundle.Amelie-compact", samplePhrase: "Bonjour, le monde!")
-    static let frenchFr0 = Voice(code: "fr-FR", language: "French (France)", name: "Daniel", identifier: "com.apple.ttsbundle.siri_male_fr-FR_compact", samplePhrase: "Bonjour, le monde!")
-    static let frenchFr1 = Voice(code: "fr-FR", language: "French (France)", name: "Marie", identifier: "com.apple.ttsbundle.siri_female_fr-FR_compact", samplePhrase: "Bonjour, le monde!")
-    static let frenchFr2 = Voice(code: "fr-FR", language: "French (France)", name: "Thomas", identifier: "com.apple.ttsbundle.Thomas-compact", samplePhrase: "Bonjour, le monde!")
-
-    static let hebrew = Voice(code: "he-IL", language: "Hebrew", name: "Carmit", identifier: "com.apple.ttsbundle.Carmit-compact", samplePhrase: "שלום, עולם!")
-    static let hindi = Voice(code: "hi-IN", language: "Hindi", name: "Lekha", identifier: "com.apple.ttsbundle.Lekha-compact", samplePhrase: "नमस्ते, दुनिया!")
-    static let hungarian = Voice(code: "hu-HU", language: "Hungarian", name: "Mariska", identifier: "com.apple.ttsbundle.Mariska-compact", samplePhrase: "Helló, Világ!")
-    static let indonesian = Voice(code: "id-ID", language: "Indonesian", name: "Damayanti", identifier: "com.apple.ttsbundle.Damayanti-compact", samplePhrase: "Halo, Dunia!")
-
-    static let italian = Voice(code: "it-IT", language: "Italian", name: "Alice", identifier: "com.apple.ttsbundle.Alice-compact", samplePhrase: "Ciao, Mondo!")
-
-    static let japanese0 = Voice(code: "ja-JP", language: "Japanese", name: "Hattori", identifier: "com.apple.ttsbundle.siri_male_ja-JP_compact", samplePhrase: "こんにちは、世界!")
-    static let japanese1 = Voice(code: "ja-JP", language: "Japanese", name: "Kyoko", identifier: "com.apple.ttsbundle.Kyoko-compact", samplePhrase: "こんにちは、世界!")
-    static let japanese2 = Voice(code: "ja-JP", language: "Japanese", name: "O-ren", identifier: "com.apple.ttsbundle.siri_female_ja-JP_compact", samplePhrase: "こんにちは、世界!")
-
-    static let korean = Voice(code: "ko-KR", language: "Korean", name: "Yuna", identifier: "com.apple.ttsbundle.Yuna-compact", samplePhrase: "안녕하세요, 세상!")
-
-    static let dutchBe = Voice(code: "nl-BE", language: "Dutch (Belgium)", name: "Ellen", identifier: "com.apple.ttsbundle.Ellen-compact", samplePhrase: "Hallo, wereld!")
-    static let dutchNl = Voice(code: "nl-NL", language: "Dutch (Netherlands)", name: "Xander", identifier: "com.apple.ttsbundle.Xander-compact", samplePhrase: "Hallo, wereld!")
-
-    static let norwegian = Voice(code: "no-NO", language: "Norwegian", name: "Nora", identifier: "com.apple.ttsbundle.Nora-compact", samplePhrase: "Hei, verden!")
-    static let polish = Voice(code: "pl-PL", language: "Polish", name: "Zosia", identifier: "com.apple.ttsbundle.Zosia-compact", samplePhrase: "Cześć, Świecie!")
-
-    static let portugueseBr = Voice(code: "pt-BR", language: "Portuguese (Brazil)", name: "Luciana", identifier: "com.apple.ttsbundle.Luciana-compact", samplePhrase: "Olá, mundo!")
-    static let portuguesePt = Voice(code: "pt-PT", language: "Portuguese (Portugal)", name: "Joana", identifier: "com.apple.ttsbundle.Joana-compact", samplePhrase: "Olá, mundo!")
-
-    static let romanian = Voice(code: "ro-RO", language: "Romanian", name: "Ioana", identifier: "com.apple.ttsbundle.Ioana-compact", samplePhrase: "Salut, lume!")
-    static let russian = Voice(code: "ru-RU", language: "Russian", name: "Milena", identifier: "com.apple.ttsbundle.Milena-compact", samplePhrase: "Привет, мир!")
-    static let slovak = Voice(code: "sk-SK", language: "Slovak", name: "Laura", identifier: "com.apple.ttsbundle.Laura-compact", samplePhrase: "Ahoj, svet!")
-    static let swedish = Voice(code: "sv-SE", language: "Swedish", name: "Alva", identifier: "com.apple.ttsbundle.Alva-compact", samplePhrase: "Hej, världen!")
-    static let thai = Voice(code: "th-TH", language: "Thai", name: "Kanya", identifier: "com.apple.ttsbundle.Kanya-compact", samplePhrase: "สวัสดี, โลก!")
-    static let turkish = Voice(code: "tr-TR", language: "Turkish", name: "Yelda", identifier: "com.apple.ttsbundle.Yelda-compact", samplePhrase: "Merhaba, dünya!")
-
-    static let chineseCn0 = Voice(code: "zh-CN", language: "Chinese (China)", name: "Li-mu", identifier: "com.apple.ttsbundle.siri_male_zh-CN_compact", samplePhrase: "你好，世界!")
-    static let chineseCn1 = Voice(code: "zh-CN", language: "Chinese (China)", name: "Tian-Tian", identifier: "com.apple.ttsbundle.Ting-Ting-compact", samplePhrase: "你好，世界!")
-    static let chineseCn2 = Voice(code: "zh-CN", language: "Chinese (China)", name: "Yu-shu", identifier: "com.apple.ttsbundle.siri_female_zh-CN_compact", samplePhrase: "你好，世界!")
-    static let chineseHk = Voice(code: "zh-HK", language: "Chinese (Hong Kong)", name: "Sin-Ji", identifier: "com.apple.ttsbundle.Sin-Ji-compact", samplePhrase: "你好，世界!")
-    static let chineseTw = Voice(code: "zh-TW", language: "Chinese (Taiwan)", name: "Mei-Jia", identifier: "com.apple.ttsbundle.Mei-Jia-compact", samplePhrase: "你好，世界!")
-}
-
-// MARK: - Hashable
-extension Voice: Hashable { }

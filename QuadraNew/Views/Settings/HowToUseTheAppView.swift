@@ -12,7 +12,7 @@ struct HowToUseTheAppView: View {
         VStack(spacing: 16) {
             HStack {
                 Text(TextConstants.addFirstCards)
-                SmallButton(image: "plus.circle.fill") { }
+                SmallButton(image: "plus.circle.fill", withBackground: false) { }
                 Spacer()
             }
             

@@ -11,13 +11,13 @@ import AVFoundation
 class TextToSpeechViewModel: NSObject, ObservableObject {
     @Published var isSpeaking: Bool = false
     private let synthesizer = AVSpeechSynthesizer()
-    private let settings: SettingsService
-    
-    init(settings: SettingsService) {
-        self.settings = settings
-    }
 
-    func speak(text: String, language: Language, voice: Voice? = nil) {
+    func speak(
+        text: String,
+        language: Language,
+        settings: SettingsService,
+        voice: Voice? = nil
+    ) {
         guard !synthesizer.isSpeaking else {
             stopSpeaking()
             return

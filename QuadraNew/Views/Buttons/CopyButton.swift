@@ -20,7 +20,7 @@ struct CopyButton: View {
                 .smallButtonImage()
                 .foregroundColor(Color.accentColor)
         }
-        .frame(size: SizeConstants.smallButtonImageSize)
+        .frame(size: SizeConstants.smallButtonSize)
     }
 }
 

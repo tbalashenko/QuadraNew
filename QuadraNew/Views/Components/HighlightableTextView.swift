@@ -21,7 +21,7 @@ struct HighlightableTextView: View {
             HStack {
                 UITextViewRepresentable(
                     text: $text,
-                    pallete: settings.highlighterPalette,
+                    palette: settings.highlighterPalette,
                     calculatedHeight: $dynamicHeight
                 )
                 .padding(.leading, SizeConstants.mediumSpacing)
@@ -46,7 +46,7 @@ struct HighlightableTextView: View {
             ErrorView(error: error)
         }
     }
-
+    
     private var placeholderView: some View {
         Text(placeholder)
             .foregroundColor(Color.gray.opacity(0.5))
@@ -70,18 +70,18 @@ private struct UITextViewRepresentable: UIViewRepresentable {
     @Binding var text: AttributedString
     @Binding var calculatedHeight: CGFloat
     let textView = HighlightableUITextView()
-    let pallete: HighlighterPalette
+    let palette: HighlighterPalette
     
-    init(text: Binding<AttributedString>, pallete: HighlighterPalette, calculatedHeight: Binding<CGFloat>) {
+    init(text: Binding<AttributedString>, palette: HighlighterPalette, calculatedHeight: Binding<CGFloat>) {
         self._text = text
         self._calculatedHeight = calculatedHeight
-        textView.palette = pallete
-        self.pallete = pallete
+        textView.palette = palette
+        self.palette = palette
     }
     
     func makeUIView(context: Context) -> UITextView {
         textView.delegate = context.coordinator
-        textView.palette = pallete
+        textView.palette = palette
         return textView
     }
     
@@ -116,6 +116,11 @@ private struct UITextViewRepresentable: UIViewRepresentable {
         
         func textViewDidChange(_ textView: UITextView) {
             _text.wrappedValue = AttributedString(textView.attributedText)
+            
+            if let highlightableTV = textView as? HighlightableUITextView {
+                highlightableTV.applyBaseAttributes()
+            }
+            
             UITextViewRepresentable.recalculateHeight(view: textView, result: $calculatedHeight)
         }
         
@@ -130,21 +135,20 @@ private struct UITextViewRepresentable: UIViewRepresentable {
             }
             
             if let pasteboardString = UIPasteboard.general.string, text == pasteboardString {
-                let plainText = NSMutableAttributedString(string: pasteboardString)
-                let updatedAttributes: [NSAttributedString.Key: Any] = [
-                    .backgroundColor: UIColor.clear,
-                    .font: UIFont.systemFont(ofSize: 18),
-                    .foregroundColor: UIColor.black
-                ]
-                
-                let fullRange = NSRange(location: 0, length: plainText.length)
-                plainText.addAttributes(updatedAttributes, range: fullRange)
+                let plainText = NSMutableAttributedString(attributedString: pasteboardString.attributedNs())
                 
                 let mutableAttributedText = NSMutableAttributedString(attributedString: textView.attributedText)
+                
                 mutableAttributedText.replaceCharacters(in: range, with: plainText)
+                
                 textView.attributedText = mutableAttributedText
                 
-                _text.wrappedValue = AttributedString(plainText)
+                _text.wrappedValue = (try? AttributedString(mutableAttributedText, including: \.uiKit)) ?? AttributedString(mutableAttributedText.string)
+                
+                if let highlightableTV = textView as? HighlightableUITextView {
+                    highlightableTV.applyBaseAttributes()
+                }
+                
                 UITextViewRepresentable.recalculateHeight(view: textView, result: $calculatedHeight)
                 
                 return false
@@ -166,11 +170,35 @@ private class HighlightableUITextView: UITextView {
         self.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         self.returnKeyType = .done
 #warning("change when I will be doing something with font")
-        self.font = .systemFont(ofSize: 18)
+        self.font = .boldSystemFont(ofSize: 18)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func applyBaseAttributes() {
+        guard let currentAttributedText = self.attributedText else { return }
+        let mutable = NSMutableAttributedString(attributedString: currentAttributedText)
+        let fullRange = NSRange(location: 0, length: mutable.length)
+        
+        mutable.enumerateAttributes(in: fullRange, options: []) { attrs, range, _ in
+            var newAttrs = attrs
+            
+            if attrs[.font] == nil {
+                newAttrs[.font] = UIFont.boldSystemFont(ofSize: 18)
+            }
+            
+            if attrs[.foregroundColor] == nil {
+                newAttrs[.foregroundColor] = UIColor.label
+            }
+            
+            mutable.setAttributes(newAttrs, range: range)
+        }
+        
+        let selectedRange = self.selectedRange
+        self.attributedText = mutable
+        self.selectedRange = selectedRange
     }
     
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -199,7 +227,7 @@ private class HighlightableUITextView: UITextView {
                     
                     let updatedAttributes: [NSAttributedString.Key: Any] = [
                         .backgroundColor: color,
-                        .font: UIFont.systemFont(ofSize: 18)
+                        .font: UIFont.boldSystemFont(ofSize: 18)
                     ]
                     
                     self.textStorage.beginEditing()
@@ -219,7 +247,7 @@ private class HighlightableUITextView: UITextView {
             
             let updatedAttributes: [NSAttributedString.Key: Any] = [
                 .backgroundColor: UIColor.clear,
-                .font: UIFont.systemFont(ofSize: 18),
+                .font: UIFont.boldSystemFont(ofSize: 18),
                 .foregroundColor: UIColor.black
             ]
             

@@ -9,13 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var settings: SettingsService
-    @Environment(\.dismiss) private var dismiss
-    
+    @Environment(\.dismiss) private var dismiss    
     @StateObject var viewModel: SettingsViewModel
-    
-    init(viewModel: SettingsViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
     
     var body: some View {
         NavigationStack {
@@ -31,20 +26,14 @@ struct SettingsView: View {
                             )
                         }
                         FootnoteText(text: TextConstants.selectLanguagesToStudy)
-                        
-                        NavigationLink(TextConstants.selectLanguage) {
-                            MultiselectablePickerView(
-                                selectedItems: $viewModel.translationLanguage,
-                                withMultipleSelection: false,
-                                navigationTitle: TextConstants.selectLanguage,
-                                getTitle: { "\($0.flagEmoji) \($0.title)" }
-                            )
+                    }
+                    
+                    if viewModel.showVoicesSection {
+                        Section(TextConstants.voices) {
+                            VoicePickerView(viewModel: viewModel)
                         }
-                        FootnoteText(text: TextConstants.selectTranslationLanguage)
                     }
-                    Section(TextConstants.voices) {
-                        VoicePickerView(viewModel: viewModel)
-                    }
+                    
                     Section(TextConstants.images) {
                         ImageSettingsView(viewModel: viewModel)
                     }

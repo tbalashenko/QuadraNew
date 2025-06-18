@@ -1,5 +1,5 @@
 //
-//  ListView.swift
+//  CardsListView.swift
 //  Quadra
 //
 //  Created by Tatyana Balashenko on 14/03/2024.
@@ -9,13 +9,17 @@ import SwiftUI
 import Combine
 import SwiftData
 
-struct ListView: View {
+struct CardsListView: View {
     @Environment(\.modelContext) private var modelContext
-    @ObservedObject var filterService = FilterService.shared
-    @StateObject var viewModel = ListViewModel()
+    @EnvironmentObject var filterService: FilterService
+    @StateObject var viewModel: ListViewModel
     @Query private var allCards: [Card]
     @Query private var archiveTags: [ArchiveTag]
     @Query private var cardSources: [CardSource]
+    
+    init(viewModel: ListViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         NavigationStack {
@@ -45,7 +49,7 @@ struct ListView: View {
             .toolbar {
                 ToolbarItem {
                     NavigationLinkWithImage(
-                        destination: { FilterView() },
+                        destination: { FilterView(viewModel: FilterViewModel(filterService: filterService)) },
                         image: "line.3.horizontal.decrease.circle.fill"
                     )
                 }
@@ -63,7 +67,11 @@ struct ListView: View {
                 
                 modelContext.delete(sdCard)
                 
-                try? modelContext.save()
+                do {
+                    try modelContext.save()
+                } catch {
+                    print("card delete error: \(error)")
+                }
             }
         }
         

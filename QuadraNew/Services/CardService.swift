@@ -12,12 +12,12 @@ final class CardService: ObservableObject {
     func createCard(from input: CardInput, archiveTag: ArchiveTag, context: ModelContext) throws {
         let newCard = Card(
             phraseToRemember: input.phrase,
+            translation: input.translation,
             archiveTag: archiveTag,
             cardSources: input.sources,
-            translation: input.translation,
+            definition: input.definition,
             transcription: input.transcription,
             phraseToRememberLanguage: input.phraseToRememberLanguage,
-            translationLanguage: input.translationLanguage,
             imageData: input.imageData,
             croppedImageData: input.croppedImageData
         )
@@ -35,7 +35,12 @@ final class CardService: ObservableObject {
     func updateCard(_ card: Card, with input: CardInput, context: ModelContext) throws {
         card.phraseToRemember = NSAttributedString(input.phrase)
         card.translation = NSAttributedString(input.translation)
-        card.transcription = input.transcription
+        if let transcription = input.transcription {
+            card.transcription = transcription
+        }
+        if let definition = input.definition {
+            card.definition = NSAttributedString(definition)
+        }
         card.cardSources = input.sources
         card.imageData = input.imageData
         card.croppedImageData = input.croppedImageData
@@ -55,12 +60,12 @@ final class CardService: ObservableObject {
         return try context.fetch(descriptor).first
     }
     
-    func updateAfterReview(_ card: Card, context: ModelContext) {
+    func updateAfterReview(_ card: Card, context: ModelContext, swipeSide: SwipeAction) {
         guard let card = try? fetchExistingCard(card, context: context) else { return }
         
         card.repetitionCounter += 1
-        card.setNextReviewDate()
-        card.setNewStatus()
+        card.setNextReviewDate(swipeSide: swipeSide)
+        card.setNewStatus(swipeSide: swipeSide)
         card.lastReviewDate = Date()
         
         do {

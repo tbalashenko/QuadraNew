@@ -10,14 +10,15 @@ import Combine
 import SwiftData
 
 final class ListViewModel: ObservableObject {
-    @ObservedObject var filterService = FilterService.shared
     @Published var cards: [Card] = []
     @Published var searchText: String = ""
     @Published var filteredCards: [CardStatus: [Card]] = [:]
     
+    var filterService:FilterService
     var cancellables: Set<AnyCancellable> = []
     
-    init() {
+    init(filterService: FilterService) {
+        self.filterService = filterService
         setupBindings()
     }
     
@@ -91,42 +92,42 @@ final class ListViewModel: ObservableObject {
 
 extension ListViewModel {
     private func checkTextMatch(card: Card) -> Bool {
-        if searchText.isEmpty || card.phraseToRemember.string.lowercased().contains(searchText.lowercased()) {
-            return true
-        } else if let translation = card.translation?.string {
-            return translation.lowercased().contains(self.searchText.lowercased())
-        }
+        if searchText.isEmpty
+            || card.phraseToRemember.string.lowercased().contains(searchText.lowercased())
+            || card.translation.string.lowercased().contains(searchText.lowercased())
+        { return true }
+        
         return false
     }
 
     private func checkStatusMatches(card: Card) -> Bool {
-        if FilterService.shared.selectedStatuses == CardStatus.allCases || FilterService.shared.selectedStatuses.isEmpty {
+        if filterService.selectedStatuses == CardStatus.allCases || filterService.selectedStatuses.isEmpty {
             return true
         } else {
-            return FilterService.shared.selectedStatuses.map { $0.id }.contains(card.cardStatus)
+            return filterService.selectedStatuses.map { $0.id }.contains(card.cardStatus)
         }
     }
 
     private func checkSourceMatches(card: Card) -> Bool {
-        guard !FilterService.shared.selectedSources.isEmpty else { return true }
+        guard !filterService.selectedSources.isEmpty else { return true }
 
         guard let sources = card.cardSources else { return false }
 
-        let selectedIDs = Set(FilterService.shared.selectedSources.map { $0.id })
+        let selectedIDs = Set(filterService.selectedSources.map { $0.id })
         return sources.contains { selectedIDs.contains($0.id) }
     }
 
     private func checkDateRangeMatches(card: Card) -> Bool {
-        let fromDateComparison = Calendar.current.compare(FilterService.shared.fromDate, to: card.creationDate, toGranularity: .day)
-        let toDateComparison = Calendar.current.compare(FilterService.shared.toDate, to: card.creationDate, toGranularity: .day)
+        let fromDateComparison = Calendar.current.compare(filterService.fromDate, to: card.creationDate, toGranularity: .day)
+        let toDateComparison = Calendar.current.compare(filterService.toDate, to: card.creationDate, toGranularity: .day)
         return fromDateComparison != .orderedDescending && toDateComparison != .orderedAscending
     }
 
     private func checkArchiveTagMatches(card: Card) -> Bool {
-        if FilterService.shared.selectedArchiveTags.isEmpty {
+        if filterService.selectedArchiveTags.isEmpty {
             return true
         } else if let archiveTag = card.archiveTag {
-            return FilterService.shared.selectedArchiveTags.contains(archiveTag)
+            return filterService.selectedArchiveTags.contains(archiveTag)
         }
 
         return false

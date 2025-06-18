@@ -10,9 +10,9 @@ import SwiftUI
 struct CardInput {
     var phrase: AttributedString
     var translation: AttributedString
-    var transcription: String
-    var phraseToRememberLanguage: String
-    var translationLanguage: String
+    var transcription: String?
+    var definition: AttributedString?
+    var phraseToRememberLanguage: String?
     var sources: [CardSource]
     var imageData: Data?
     var croppedImageData: Data?

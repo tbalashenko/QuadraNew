@@ -5,7 +5,6 @@
 //  Created by Tatyana Balashenko on 19/05/2025.
 //
 
-
 import Foundation
 
 enum AspectRatio: String, CaseIterable, RawRepresentable {

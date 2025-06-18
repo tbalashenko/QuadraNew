@@ -35,10 +35,10 @@ final class ContentViewModel: ObservableObject {
         showInfoView = readyToRepeatCards.isEmpty
     }
     
-    func swipeCard(card: Card, cardService: CardService, context: ModelContext) {
+    func swipeCard(card: Card, cardService: CardService, context: ModelContext, swipeSide: SwipeAction) {
         readyToRepeatCards.removeAll(where: { $0.id == card.id })
         
-        cardService.updateAfterReview(card, context: context)
+        cardService.updateAfterReview(card, context: context, swipeSide: swipeSide)
         
         numberOfReviewedCards += 1
         showConfetti = readyToRepeatCards.isEmpty

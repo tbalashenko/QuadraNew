@@ -9,11 +9,9 @@ import Combine
 import Foundation
 
 final class FilterService: ObservableObject {
-    static let shared = FilterService()
-    
-    @Published var selectedStatuses = CardStatus.allCases
-    @Published var selectedSources = [CardSource]()
-    @Published var selectedArchiveTags = [ArchiveTag]()
+    @Published var selectedStatuses: [CardStatus] = []
+    @Published var selectedSources: [CardSource] = []
+    @Published var selectedArchiveTags: [ArchiveTag] = []
     @Published var fromDate = Date()
     @Published var toDate = Date()
     @Published var minDate = Date()
@@ -23,27 +21,18 @@ final class FilterService: ObservableObject {
     @Published var allArchiveTags = [ArchiveTag]()
     @Published var allCardSources = [CardSource]()
     
-    var wasInitiallySet = false
-    
     func setData(cards: [Card], archiveTags: [ArchiveTag], cardSources: [CardSource]) {
         self.allCards = cards
         self.allArchiveTags = archiveTags
         self.allCardSources = cardSources
-        
-        if !wasInitiallySet {
-            wasInitiallySet.toggle()
-            self.selectedArchiveTags = archiveTags
-        }
-        
         setupDates()
     }
     
     func reset() {
-        selectedStatuses = CardStatus.allCases
-        selectedSources = allCardSources
-        selectedArchiveTags = allArchiveTags
+        selectedSources = []
+        selectedStatuses = []
+        selectedArchiveTags = []
         setupDates()
-        wasInitiallySet = false
     }
     
     func setupDates() {

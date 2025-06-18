@@ -35,7 +35,12 @@ extension Card {
     /// - Six months later
     /// - One year later
     /// - archive
-    func setNextReviewDate() {
+    func setNextReviewDate(swipeSide: SwipeAction) {
+        guard swipeSide == .right else {
+            nextReviewDate = Date().addingTimeInterval(60 * 60 * 24)
+            return
+        }
+        
         switch CardStatus(cardStatus) {
                 //review in 5 minutes
             case .input:
@@ -58,7 +63,9 @@ extension Card {
         }
     }
     
-    func setNewStatus() {
+    func setNewStatus(swipeSide: SwipeAction) {
+        guard swipeSide == .right else { return }
+        
         let status = CardStatus(cardStatus)
         
         guard status != .archive else { return }

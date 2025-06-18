@@ -11,9 +11,12 @@ import SwiftData
 @MainActor
 final class CardViewModel: ObservableObject {
     @Published var phraseToRemember: AttributedString = ""
+    @Published var phraseToRememberLanguage: Language?
     @Published var translation: AttributedString = ""
     @Published var transcription = ""
-        
+    @Published var definition: AttributedString = ""
+    @Published var hintStage: HintStage = .translation
+    
     @Published var image: Image?
     @Published var fullImage: Image?
     
@@ -23,31 +26,54 @@ final class CardViewModel: ObservableObject {
     @Published var additionalInfo = [Info]()
     @Published var tags = [TagCloudItem]()
     
+    private var cachedHint: AttributedString?
+    
     var card: Card
     let mode: CardViewMode
     
-    var isFlippable: Bool {
-        !translation.isEmpty
+    var showTranscription: Bool {
+        !transcription.isEmpty
     }
     
-    var showTranscription: Bool {
-        !transcription.isEmpty && showAdditionalInfo
+    var currentHintText: AttributedString {
+        switch hintStage {
+            case .translation:
+                return translation
+            case .definition:
+                return definition
+            case .obscuredPhrase:
+                if let cachedHint { return cachedHint }
+                let hint = getHint()
+                cachedHint = hint
+                return hint
+        }
+    }
+
+    var isFinalHintStage: Bool {
+        hintStage.isFinal
     }
     
     init(card: Card, mode: CardViewMode) {
         self.card = card
         self.mode = mode
         self.phraseToRemember = AttributedString(card.phraseToRemember)
-        if let translation = card.translation {
-            self.translation = AttributedString(translation)
+        if let languageRawValue = card.phraseToRememberLanguage {
+            self.phraseToRememberLanguage = Language(rawValue: languageRawValue)
         }
-        self.transcription = card.transcription ?? ""
+        self.translation = AttributedString(card.translation)
+        if let transcription = card.transcription {
+            self.transcription = transcription
+        }
+        
+        if let definition = card.definition {
+            self.definition =  AttributedString(definition)
+        }
         
         self.status = CardStatus(card.cardStatus)
         
         let image = card.imageData.flatMap { UIImage(data: $0) }.map { Image(uiImage: $0) }
         let croppedImage = card.croppedImageData.flatMap { UIImage(data: $0) }.map { Image(uiImage: $0) }
-
+        
         self.image = croppedImage ?? image
         self.fullImage = image
         
@@ -58,6 +84,8 @@ final class CardViewModel: ObservableObject {
     }
     
     func prepareAdditionalInfo() {
+        additionalInfo.removeAll()
+        
         additionalInfo.append(Info(description: TextConstants.added, value: card.creationDate.formatDate()))
         additionalInfo.append(Info(description: TextConstants.numberOfRepetitions, value: String(card.repetitionCounter)))
         
@@ -70,10 +98,6 @@ final class CardViewModel: ObservableObject {
         tags.removeAll()
         
         if let tag = prepareArchiveTag() {
-            tags.append(tag)
-        }
-        
-        if let tag = prepareStatusTag() {
             tags.append(tag)
         }
         
@@ -95,19 +119,6 @@ final class CardViewModel: ObservableObject {
         return archiveTag
     }
     
-    private func prepareStatusTag() -> TagCloudItem? {
-        guard let status = CardStatus(rawValue: card.cardStatus) else { return nil }
-        
-        let statusTag = TagCloudItem(
-            isSelected: true,
-            id: UUID(uuidString: String(status.id)) ?? UUID(),
-            title: status.title,
-            color: status.color
-        )
-        
-        return statusTag
-    }
-    
     private func prepareSourceTags() -> [TagCloudItem]? {
         guard let cardSources = card.cardSources else { return nil }
         
@@ -123,16 +134,54 @@ final class CardViewModel: ObservableObject {
         return sourceTags
     }
     
+    func nextHintStage() {
+        guard let next = hintStage.next(hasDefinition: !definition.characters.isEmpty) else { return }
+        hintStage = next
+
+        if next == .obscuredPhrase {
+            cachedHint = getHint()
+        }
+    }
+    
+    func getHint() -> AttributedString {
+        let words = card.phraseToRemember.string.split(separator: " ")
+        
+        switch words.count {
+            case 1:
+                let modified = phraseToRemember.characters.enumerated().map { index, char in
+                    index % 2 == 0 ? "*" : char
+                }
+                return String(modified).attributed()
+                
+            case 2:
+                let indexToShow = Int.random(in: 0...1)
+                let modifiedWords = words.enumerated().map { index, word in
+                    index == indexToShow ? String(word) : String(repeating: "*", count: word.count)
+                }
+                return modifiedWords.joined(separator: " ").attributed()
+                
+            default:
+                var indices = Array(words.indices)
+                indices.shuffle()
+                let visibleIndices = Set(indices.prefix(words.count / 3))
+                
+                let modifiedWords = words.enumerated().map { index, word in
+                    visibleIndices.contains(index) ? String(word) : String(repeating: "*", count: word.count)
+                }
+                return modifiedWords.joined(separator: " ").attributed()
+        }
+    }
+    
 #warning("return back this functionality")
     func backToInput(context: ModelContext) {
-//        let cardId = card.id
-//        
-//        let descriptor = FetchDescriptor<Card>(predicate: #Predicate { $0.id == cardId })
-//
-//        if let existingCard = try? context.fetch(descriptor).first {
-//            existingCard.cardStatus = CardStatus.input.rawValue
-//            
-//            try? context.save()
-//        }
+        //        let cardId = card.id
+        //
+        //        let descriptor = FetchDescriptor<Card>(predicate: #Predicate { $0.id == cardId })
+        //
+        //        if let existingCard = try? context.fetch(descriptor).first {
+        //            existingCard.cardStatus = CardStatus.input.rawValue
+        //
+        //            try? context.save()
+        //        }
     }
 }

@@ -44,162 +44,160 @@ enum Language: String, CaseIterable, Identifiable {
     
     var code: String {
         switch self {
-            case .english: return "en"
-            case .spanish: return "es"
-            case .chinese: return "zh"
-            case .french: return "fr"
-            case .arabic: return "ar"
-            case .russian: return "ru"
-            case .portuguese: return "pt"
-            case .german: return "de"
-            case .hindi: return "hi"
-            case .japanese: return "ja"
-            case .korean: return "ko"
-            case .italian: return "it"
-            case .polish: return "pl"
-            case .turkish: return "tr"
-            case .dutch: return "nl"
-            case .czech: return "cs"
-            case .danish: return "da"
-            case .greek: return "el"
-            case .finnish: return "fi"
-            case .hebrew: return "he"
-            case .hungarian: return "hu"
-            case .indonesian: return "id"
-            case .norwegian: return "no"
-            case .romanian: return "ro"
-            case .slovak: return "sk"
-            case .swedish: return "sv"
-            case .thai: return "th"
+            case .english: "en"
+            case .spanish: "es"
+            case .chinese: "zh"
+            case .french: "fr"
+            case .arabic: "ar"
+            case .russian: "ru"
+            case .portuguese: "pt"
+            case .german: "de"
+            case .hindi: "hi"
+            case .japanese: "ja"
+            case .korean: "ko"
+            case .italian: "it"
+            case .polish: "pl"
+            case .turkish: "tr"
+            case .dutch: "nl"
+            case .czech: "cs"
+            case .danish: "da"
+            case .greek: "el"
+            case .finnish: "fi"
+            case .hebrew: "he"
+            case .hungarian: "hu"
+            case .indonesian: "id"
+            case .norwegian: "no"
+            case .romanian: "ro"
+            case .slovak: "sk"
+            case .swedish: "sv"
+            case .thai: "th"
         }
     }
     
     var flagEmoji: String {
         switch self {
-            case .english: return "🇺🇸"
-            case .spanish: return "🇪🇸"
-            case .chinese: return "🇨🇳"
-            case .french: return "🇫🇷"
-            case .arabic: return "🇸🇦"
-            case .russian: return "🇷🇺"
-            case .portuguese: return "🇵🇹"
-            case .german: return "🇩🇪"
-            case .hindi: return "🇮🇳"
-            case .japanese: return "🇯🇵"
-            case .korean: return "🇰🇷"
-            case .italian: return "🇮🇹"
-            case .polish: return "🇵🇱"
-            case .turkish: return "🇹🇷"
-            case .dutch: return "🇳🇱"
-            case .czech: return "🇨🇿"
-            case .danish: return "🇩🇰"
-            case .greek: return "🇬🇷"
-            case .finnish: return "🇫🇮"
-            case .hebrew: return "🇮🇱"
-            case .hungarian: return "🇭🇺"
-            case .indonesian: return "🇮🇩"
-            case .norwegian: return "🇳🇴"
-            case .romanian: return "🇷🇴"
-            case .slovak: return "🇸🇰"
-            case .swedish: return "🇸🇪"
-            case .thai: return "🇹🇭"
+            case .english: "🇺🇸"
+            case .spanish: "🇪🇸"
+            case .chinese: "🇨🇳"
+            case .french: "🇫🇷"
+            case .arabic: "🇸🇦"
+            case .russian: "🇷🇺"
+            case .portuguese: "🇵🇹"
+            case .german: "🇩🇪"
+            case .hindi: "🇮🇳"
+            case .japanese: "🇯🇵"
+            case .korean: "🇰🇷"
+            case .italian: "🇮🇹"
+            case .polish: "🇵🇱"
+            case .turkish: "🇹🇷"
+            case .dutch: "🇳🇱"
+            case .czech: "🇨🇿"
+            case .danish: "🇩🇰"
+            case .greek: "🇬🇷"
+            case .finnish: "🇫🇮"
+            case .hebrew: "🇮🇱"
+            case .hungarian: "🇭🇺"
+            case .indonesian: "🇮🇩"
+            case .norwegian: "🇳🇴"
+            case .romanian: "🇷🇴"
+            case .slovak: "🇸🇰"
+            case .swedish: "🇸🇪"
+            case .thai: "🇹🇭"
         }
     }
     
     var voices: [Voice]? {
         switch self {
             case .english:
-                return [.englishUs0, .englishUs1, .englishUs2, .englishUs3, .englishGb0, .englishGb1, .englishGb2, .englishIr, .englishAu0, .englishAu1, .englishAu2]
+                [.englishUs0, .englishUs1, .englishIr, .englishAu, .englishGb]
             case .spanish:
-                return [.spanishSp, .spanishMx]
+                [.spanishSp, .spanishMx]
             case .chinese:
-                return [.chineseCn0, .chineseCn1, .chineseCn2, .chineseHk, .chineseTw]
+                [.chineseCn, .chineseHk, .chineseTw]
             case .french:
-                return [.frenchCa, .frenchFr0, .frenchFr1, .frenchFr2]
+                [.frenchCa, .frenchFr]
             case .arabic:
-                return nil
+                nil
             case .russian:
-                return [.russian]
+                [.russian]
             case .portuguese:
-                return [.portugueseBr, .portuguesePt]
+                [.portugueseBr, .portuguesePt]
             case .german:
-                return [.german0, .german1, .german2]
+                [.german]
             case .hindi:
-                return [.hindi]
+                [.hindi]
             case .japanese:
-                return [.japanese0, .japanese1, .japanese2]
+                [.japanese]
             case .korean:
-                return [.korean]
+                [.korean]
             case .italian:
-                return [.italian]
+                [.italian]
             case .polish:
-                return [.polish]
+                [.polish]
             case .turkish:
-                return [.turkish]
+                [.turkish]
             case .dutch:
-                return [.dutchNl, .dutchBe]
+                [.dutchNl, .dutchBe]
             case .czech:
-                return nil
+                [.czech]
             case .danish:
-                return [.danish]
+                [.danish]
             case .greek:
-                return [.greek]
+                [.greek]
             case .finnish:
-                return [.finnish]
+                [.finnish]
             case .hebrew:
-                return [.hebrew]
+                [.hebrew]
             case .hungarian:
-                return [.hungarian]
+                [.hungarian]
             case .indonesian:
-                return [.indonesian]
+                [.indonesian]
             case .norwegian:
-                return [.norwegian]
+                [.norwegian]
             case .romanian:
-                return [.romanian]
+                [.romanian]
             case .slovak:
-                return [.slovak]
+                [.slovak]
             case .swedish:
-                return [.swedish]
+                [.swedish]
             case .thai:
-                return [.thai]
+                [.thai]
         }
     }
+    
     
     var samplePhrase: String {
         switch self {
-            case .english: return "Hello, World!"
-            case .spanish: return "¡Hola, mundo!"
-            case .chinese: return "你好，世界!"
-            case .french: return "Bonjour, le monde!"
-            case .arabic: return "مرحبًا، أيها العالم!"
-            case .russian: return "Привет, мир!"
-            case .portuguese: return "Olá, mundo!"
-            case .german: return "Hallo, Welt!"
-            case .hindi: return "नमस्ते, दुनिया!"
-            case .japanese: return "こんにちは、世界!"
-            case .korean: return "안녕하세요, 세상!"
-            case .italian: return "Ciao, Mondo!"
-            case .polish: return "Cześć, Świecie!"
-            case .turkish: return "Merhaba, dünya!"
-            case .dutch: return "Hallo, wereld!"
-            case .czech: return "Ahoj, Světe!"
-            case .danish: return "Hej, Verden!"
-            case .greek: return "Γεια σου, κόσμε!"
-            case .finnish: return "Hei, maailma!"
-            case .hebrew: return "שלום, עולם!"
-            case .hungarian: return "Helló, Világ!"
-            case .indonesian: return "Halo, Dunia!"
-            case .norwegian: return "Hei, verden!"
-            case .romanian: return "Salut, lume!"
-            case .slovak: return "Ahoj, svet!"
-            case .swedish: return "Hej, världen!"
-            case .thai: return "สวัสดี, โลก!"
+            case .english: "Hello, World!"
+            case .spanish: "¡Hola, mundo!"
+            case .chinese: "你好，世界!"
+            case .french: "Bonjour, le monde!"
+            case .arabic: "مرحبًا، أيها العالم!"
+            case .russian: "Привет, мир!"
+            case .portuguese: "Olá, mundo!"
+            case .german: "Hallo, Welt!"
+            case .hindi: "नमस्ते, दुनिया!"
+            case .japanese: "こんにちは、世界!"
+            case .korean: "안녕하세요, 세상!"
+            case .italian: "Ciao, Mondo!"
+            case .polish: "Cześć, Świecie!"
+            case .turkish: "Merhaba, dünya!"
+            case .dutch: "Hallo, wereld!"
+            case .czech: "Ahoj, Světe!"
+            case .danish: "Hej, Verden!"
+            case .greek: "Γεια σου, κόσμε!"
+            case .finnish: "Hei, maailma!"
+            case .hebrew: "שלום, עולם!"
+            case .hungarian: "Helló, Világ!"
+            case .indonesian: "Halo, Dunia!"
+            case .norwegian: "Hei, verden!"
+            case .romanian: "Salut, lume!"
+            case .slovak: "Ahoj, svet!"
+            case .swedish: "Hej, världen!"
+            case .thai: "สวัสดี, โลก!"
         }
-    }
-    
-    init(_ rawValue: String) {
-        self = Language(rawValue: rawValue) ?? .english
     }
 }
 
-
+// MARK: - Hashable
+extension Language: Hashable { }

@@ -15,9 +15,9 @@ struct StyledText: View {
         HStack {
             Text(description)
                 .bold()
-                .font(.system(size: 16))
+                .font(.system(size: 18))
             Text(value)
-                .font(.system(size: 16))
+                .font(.system(size: 18))
         }
     }
 }

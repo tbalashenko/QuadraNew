@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CreationDateView: View {
-    @ObservedObject var filterService = FilterService.shared
+    @EnvironmentObject var filterService: FilterService
 
     var body: some View {
         Group {

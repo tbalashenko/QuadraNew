@@ -15,13 +15,16 @@ struct QuadraNewApp: App {
     @StateObject private var settingsService: SettingsService
     @StateObject private var sizeConstants: SizeConstants
     @StateObject private var cardService: CardService
+    @StateObject private var filterService: FilterService
     
     init() {
         let settings = SettingsService()
         let cardService = CardService()
+        let filterService = FilterService()
         _settingsService = StateObject(wrappedValue: settings)
         _cardService = StateObject(wrappedValue: cardService)
         _sizeConstants = StateObject(wrappedValue: SizeConstants(settings: settings))
+        _filterService = StateObject(wrappedValue: filterService)
         
         ValueTransformer.setValueTransformer(
             AttributedStringTransformer(),
@@ -49,7 +52,7 @@ struct QuadraNewApp: App {
                 ContentView()
                     .tabItem { Image(systemName: "book.pages") }
                     .tag(AppTab.cards)
-                ListView()
+                CardsListView(viewModel: ListViewModel(filterService: filterService))
                     .tabItem { Image(systemName: "list.bullet") }
                     .tag(AppTab.list)
                 StatView()
@@ -64,5 +67,6 @@ struct QuadraNewApp: App {
         .environmentObject(settingsService)
         .environmentObject(sizeConstants)
         .environmentObject(cardService)
+        .environmentObject(filterService)
     }
 }

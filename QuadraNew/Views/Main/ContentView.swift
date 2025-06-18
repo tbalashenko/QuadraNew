@@ -11,11 +11,9 @@ import Combine
 
 struct ContentView: View {
     @EnvironmentObject var settings: SettingsService
-    @EnvironmentObject var sizeConstants: SizeConstants
-    @Environment(\.modelContext) private var modelContext
     @StateObject private var viewModel = ContentViewModel()
     @State private var showSetupCardView: Bool = false
-    @State private var isLoading: Bool = true
+    @State private var isLoading: Bool = false
     
     @Query private var allCards: [Card]
     @Query private var allSources: [CardSource]
@@ -33,20 +31,28 @@ struct ContentView: View {
                     InfoView {
                         viewModel.setCards(allCards)
                     }
-                    .modelContext(modelContext)
                 }
             }
             .overlay { ConfettiView(isPresented: $viewModel.showConfetti) }
             .overlay { SkeletonCardView(isPresented: $isLoading) }
             .onAppear {
-                !allCards.isEmpty ? setCards() : (isLoading = false)
+                if allCards.isEmpty {
+                    if !viewModel.readyToRepeatCards.isEmpty {
+                        setCards(withAnimation: false)
+                    }
+                } else {
+                    setCards()
+                }
             }
             .onDisappear {
                 viewModel.showConfetti = false
             }
             .toolbar {
                 ToolbarItem {
-                    SmallButton(image: "plus.circle.fill") { 
+                    SmallButton(
+                        image: "plus.circle.fill",
+                        withBackground: false
+                    ) {
                         showSetupCardView = true
                     }
                 }
@@ -80,11 +86,15 @@ struct ContentView: View {
         }
     }
     
-    private func setCards() {
-        isLoading = true
+    private func setCards(withAnimation: Bool = true) {
+        if withAnimation {
+            isLoading = true
+        }
         viewModel.setCards(allCards)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            isLoading = false
+        if withAnimation {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                isLoading = false
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ struct AdditionalInfoView: View {
     var body: some View {
         VStack(alignment: .center) {
             HStack {
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: 4) {
                     ForEach(viewModel.additionalInfo, id: \.self) { info in
                         StyledText(description: info.description, value: info.value)
                     }

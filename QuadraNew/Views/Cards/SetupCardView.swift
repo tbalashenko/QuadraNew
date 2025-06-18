@@ -13,6 +13,7 @@ struct SetupCardView: View {
     @Environment(\.modelContext) private var context
     @EnvironmentObject private var cardService: CardService
     @EnvironmentObject private var settings: SettingsService
+    @EnvironmentObject private var filterService: FilterService
     @State private var showPopup = false
     @State private var showAlert = false
     @StateObject var viewModel: SetupCardViewModel
@@ -32,6 +33,7 @@ struct SetupCardView: View {
                 Section(TextConstants.phraseToRemember) {
                     phraseToRemember
                     translation
+                    definition
                     transcription
                 }
                 Section(TextConstants.sources) {
@@ -70,6 +72,7 @@ struct SetupCardView: View {
             text: $viewModel.url,
             error: viewModel.urlError,
             placeholder: TextConstants.addImageUrl,
+            font: .system(size: 18, design: .monospaced),
             additionalButtonImage: Image(systemName: "square.and.arrow.down"),
             additionalAsyncButtonAction: { await viewModel.downloadImage() },
             pasteButtonAction: {
@@ -89,13 +92,15 @@ struct SetupCardView: View {
                 viewModel.formatAndSetPhrase($0, string: &viewModel.phraseToRemember)
                 showPopup = true
             }
-            Picker("", selection: $viewModel.phraseToRememberLanguage) {
-                ForEach(settings.languagesToStudy) { language in
-                    Text(language.flagEmoji)
-                        .tag(language)
+            if let languages = settings.languagesToStudy {
+                Picker("", selection: $viewModel.phraseToRememberLanguage) {
+                    ForEach(languages) { language in
+                        Text(language.flagEmoji)
+                            .tag(language)
+                    }
                 }
+                .pickerStyle(.segmented)
             }
-            .pickerStyle(.segmented)
         }
     }
     
@@ -110,11 +115,23 @@ struct SetupCardView: View {
         }
     }
     
+    private var definition: some View {
+        HighlightableTextView(
+            text: $viewModel.definition,
+            placeholder: TextConstants.addDefinition,
+            error: viewModel.definitionError
+        ) {
+            viewModel.formatAndSetPhrase($0, string: &viewModel.definition)
+            showPopup = true
+        }
+    }
+    
     private var transcription: some View  {
         TextFieldWithFlippableButton(
             text: $viewModel.transcription,
             error: viewModel.transcriptionError,
             placeholder: TextConstants.addTranscription,
+            font: .system(size: 18, design: .monospaced),
             pasteButtonAction: { text in
                 withAnimation {
                     viewModel.transcription = text
@@ -143,18 +160,23 @@ struct SetupCardView: View {
     }
     
     private var saveButton: some View {
-        AsyncButton {
-            hideKeyboard()
-            await viewModel.saveCard(
-                context: context,
-                cardService: cardService,
-                settings: settings
-            )
-            onDismiss?(true)
-            showSetupCardView = false
-        } label: {
-            Text(TextConstants.save)
-        }
+        AsyncButton(
+            isEnabled: viewModel.isSaveButtonEnabled,
+            action: {
+                hideKeyboard()
+                await viewModel.saveCard(
+                    context: context,
+                    cardService: cardService,
+                    settings: settings,
+                    filterService: filterService
+                )
+                onDismiss?(true)
+                showSetupCardView = false
+            },
+            label: {
+                Text(TextConstants.save)
+            }
+        )
     }
     
     private var cancelButton: some View {

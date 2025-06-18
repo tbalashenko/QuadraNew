@@ -9,35 +9,27 @@ import Foundation
 import Combine
 
 final class SettingsService: ObservableObject {
-    @Published var languagesToStudy: [Language] = {
+    @Published var languagesToStudy: [Language]? = {
         let languages = UserDefaults.standard.stringArray(forKey: UserDefaultsKeys.languagesToStudy)
-        return languages?.compactMap { Language(rawValue: $0) } ?? [.english]
+        return languages?.compactMap { Language(rawValue: $0) }
     }() {
         didSet {
+            guard let languagesToStudy else { return }
+            
             UserDefaults.standard.set(languagesToStudy.map { $0.rawValue }, forKey: UserDefaultsKeys.languagesToStudy)
-        }
-    }
-    
-    @Published var translationLanguage: Language = {
-        let language = UserDefaultsManager.stringForKey(UserDefaultsKeys.translationLanguage) ?? Language.english.rawValue
-        return Language(language)
-    }() {
-        didSet {
-            UserDefaults.standard.set(translationLanguage.rawValue, forKey: UserDefaultsKeys.translationLanguage)
         }
     }
     
     @Published var voices: [Language: Voice] = {
         guard let savedDict = UserDefaults.standard.dictionary(forKey: UserDefaultsKeys.selectedVoices) as? [String: String] else { return [:] }
+        
+        var loadedVoices: [Language: Voice] = [:]
+        for (languageRaw, voiceRaw) in savedDict {
+            guard let language = Language(rawValue: languageRaw), let voice = Voice(rawValue: voiceRaw) else { continue }
             
-            var loadedVoices: [Language: Voice] = [:]
-            for (languageRaw, voiceRaw) in savedDict {
-                let language = Language(languageRaw)
-                let voice = Voice(identifier: voiceRaw)
-                
-                loadedVoices[language] = Voice(identifier: voiceRaw)
-            }
-            return loadedVoices
+            loadedVoices[language] = Voice(rawValue: voiceRaw)
+        }
+        return loadedVoices
     }() {
         didSet {
             let dictToSave = voices.reduce(into: [String: String]()) { result, pair in
@@ -47,7 +39,7 @@ final class SettingsService: ObservableObject {
             UserDefaults.standard.set(dictToSave, forKey: UserDefaultsKeys.selectedVoices)
         }
     }
-
+    
     
     @Published var aspectRatio: AspectRatio = {
         let rawValue = UserDefaultsManager.stringForKey(UserDefaultsKeys.aspectRatio) ?? AspectRatio.sixteenToNine.rawValue

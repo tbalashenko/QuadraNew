@@ -55,10 +55,11 @@ struct CardHeaderView: View {
         viewModel: CardViewModel(
             card: Card(
                 phraseToRemember: "What is your name? What if it's longer than I expected",
+                translation: "Test",
                 archiveTag: ArchiveTag(),
                 cardSources: [],
+                definition: "Text",
                 phraseToRememberLanguage: "en",
-                translationLanguage: "pl",
                 imageData: UIImage(named: "testImage")?.pngData(),
                 croppedImageData: UIImage(named: "testImage")?.pngData(),
             ), mode: .view

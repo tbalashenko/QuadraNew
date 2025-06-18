@@ -47,21 +47,17 @@ struct ListRowView: View {
         .background {
             NavigationLink(
                 "",
-                destination: CardView(viewModel: cardViewModel))
+                destination: EditableCardView(viewModel: cardViewModel)
+            )
             .opacity(0)
-                #warning("add this functionality back")
-//                {
-//                    withAnimation {
-//                        cardViewModel.backToInput(context: ModelContext)
-//                    }
-//                }
-
-            
         }
         .toolbarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
         .onAppear {
             imageSize = sizeConstants.listImageSize
+        }
+        .onDisappear {
+            resetImage()
         }
     }
 
@@ -114,13 +110,17 @@ extension ListRowView {
                 isMaxImageSize = true
             }
         } else if isMaxImageSize, value.translation.width < 0 {
-            withAnimation(.bouncy(duration: 2)) {
-                offset = -SizeConstants.screenWidth / 2
-                imageSize = sizeConstants.listImageSize
-                isMaxImageSize = false
-            }
+            resetImage()
         }
         haptic(.medium)
         lastOffset = offset
+    }
+    
+    private func resetImage() {
+        withAnimation(.bouncy(duration: 2)) {
+            offset = -SizeConstants.screenWidth / 2
+            imageSize = sizeConstants.listImageSize
+            isMaxImageSize = false
+        }
     }
 }

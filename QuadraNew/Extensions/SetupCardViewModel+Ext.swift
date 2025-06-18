@@ -32,6 +32,7 @@ extension SetupCardViewModel {
         setupUrl()
         setupPhraseToRemember()
         setupTranslation()
+        setupDefinition() 
         setupTranscription()
         setupNewSourceText()
     }
@@ -82,6 +83,26 @@ extension SetupCardViewModel {
                     self.translationError = ""
                 } else {
                     Helper.getErrorMessage(for: self.translation, errorText: &self.translationError)
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func setupDefinition() {
+        $definition
+            .receive(on: RunLoop.main)
+            .map { $0.count <= SizeConstants.textLimit }
+            .assign(to: \.isDefinitionValid, on: self)
+            .store(in: &cancellables)
+        $isTranslationValid
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isValid in
+                guard let self = self else { return }
+                
+                if isValid {
+                    self.definitionError = ""
+                } else {
+                    Helper.getErrorMessage(for: self.definition, errorText: &self.definitionError)
                 }
             }
             .store(in: &cancellables)
@@ -203,7 +224,7 @@ extension SetupCardViewModel {
     func formatAndSetPhrase(_ text: String, string: inout AttributedString) {
         let updatedAttributes: [NSAttributedString.Key: Any] = [
             .backgroundColor: UIColor.clear,
-            .font: UIFont.systemFont(ofSize: 18),
+            .font: UIFont.boldSystemFont(ofSize: 18),
             .foregroundColor: UIColor.black
         ]
         
@@ -222,8 +243,8 @@ extension SetupCardViewModel {
             phrase: phraseToRemember,
             translation: translation,
             transcription: transcription,
-            phraseToRememberLanguage: phraseToRememberLanguage.rawValue,
-            translationLanguage: translationLanguage.rawValue,
+            definition: definition,
+            phraseToRememberLanguage: phraseToRememberLanguage?.rawValue,
             sources: selectedSources,
             imageData: imageData,
             croppedImageData: croppedData

@@ -9,7 +9,14 @@ import SwiftUI
 
 struct MockData {
     static var cards: [Card] = [
-        
+        Card(
+            phraseToRemember: "What is your name? What is your name? What is your name? What is your name? What if it's longer than I expected",
+            translation: "What is your translation? What if it's longer than I expected",
+            archiveTag: ArchiveTag(),
+            cardSources: [],
+            definition: "What is your definition? What if it's longer than I expected",
+            phraseToRememberLanguage: Language.english.rawValue
+        )
     ]
     
     static let mockedCards: [DummyItem] = [

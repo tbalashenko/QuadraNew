@@ -13,7 +13,7 @@ struct NeuTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
             .lineLimit(5)
-            .padding(.leading, SizeConstants.mediumSpacing)
+            .padding(.leading, SizeConstants.mediumSpacing + 4)
             .padding(.trailing, SizeConstants.bigSpacing)
             .padding(.vertical, SizeConstants.spacing)
             .frame(minHeight: 36)
@@ -32,8 +32,13 @@ struct NeuTextFieldStyle: TextFieldStyle {
 }
 
 #Preview {
+    @Previewable
+    @State var text2: AttributedString = "fferfrf"
+    
     VStack {
         Spacer()
+        HighlightableTextView(text: $text2, placeholder: "Placeholder", error: "Test")
+            .environmentObject(SettingsService())
         TextField("Test", text: .constant("Test"), axis: .vertical)
             .textFieldStyle(NeuTextFieldStyle(text: .constant("Test")))
         TextField("Test", text: .constant("Test"), axis: .vertical)

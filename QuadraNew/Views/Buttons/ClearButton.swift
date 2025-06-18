@@ -13,6 +13,7 @@ struct ClearButton<T: Clearable>: View {
     var body: some View {
         SmallButton(
             image: "multiply.circle.fill",
+            withBackground: false,
             foregroundStyle: Color.secondary
         ) {
             withAnimation {

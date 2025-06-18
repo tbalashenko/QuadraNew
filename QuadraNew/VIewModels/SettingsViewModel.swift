@@ -10,7 +10,6 @@ import Combine
 
 final class SettingsViewModel: ObservableObject {
     @Published var languagesToStudy = [Language]()
-    @Published var translationLanguage = [Language]()
     @Published var selectedVoices: [Language: Voice] = [:]
     @Published var selectedRatio: AspectRatio = .sixteenToNine
     @Published var selectedImageScale: ImageScale = .percent100
@@ -19,9 +18,11 @@ final class SettingsViewModel: ObservableObject {
     @Published var highlighterPalette: HighlighterPalette = .pale
     @Published var showProgress: Bool = true
     @Published var reminderTime: Date = Date()
+    var showVoicesSection: Bool { !selectedVoices.isEmpty }
     
+    var previousLanguages: [Language] = []
     private var needSetupNotifications: Bool { settings.reminderTime != reminderTime  }
-    private var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
     
     private let settings: SettingsService
 
@@ -31,11 +32,15 @@ final class SettingsViewModel: ObservableObject {
         
         checkNotificationPermission()
         observeNotificationsSwitch()
+        observeLanguagesToStudy()
     }
     
     func setup() {
-        languagesToStudy = settings.languagesToStudy
-        translationLanguage = [settings.translationLanguage]
+        if let languagesToStudy = settings.languagesToStudy {
+            self.languagesToStudy = languagesToStudy
+            self.previousLanguages = languagesToStudy
+        }
+        
         selectedVoices = settings.voices
         selectedImageScale = settings.imageScaleSetting
         showConfetti = settings.showConfetti
@@ -48,16 +53,6 @@ final class SettingsViewModel: ObservableObject {
 
     func save() {
         settings.languagesToStudy = languagesToStudy
-        if let translationLanguage = translationLanguage.first {
-            settings.translationLanguage = translationLanguage
-        }
-        
-        for language in languagesToStudy {
-            if selectedVoices[language] == nil, let defaultVoice = language.voices?.first {
-                selectedVoices[language] = defaultVoice
-            }
-        }
-        
         settings.voices = selectedVoices
         settings.aspectRatio = selectedRatio
         settings.imageScaleSetting = selectedImageScale
@@ -69,27 +64,5 @@ final class SettingsViewModel: ObservableObject {
         if needSetupNotifications {
             NotificationsService.shared.scheduleNotifications(time: reminderTime)
         }
-    }
-    
-    func checkNotificationPermission() {
-        NotificationsService.shared.canSendNotifications { [weak self] canSend in
-            DispatchQueue.main.async {
-                self?.sendNotifications = canSend
-            }
-        }
-    }
-    
-    private func observeNotificationsSwitch() {
-        $sendNotifications
-            .sink { [weak self] isOn in
-                if isOn {
-                    NotificationsService.shared.requestNotificationPermission { isEnabled, _ in
-                        self?.sendNotifications = isEnabled
-                    }
-                } else {
-                    NotificationsService.shared.removeNotifications(removeTime: true)
-                }
-            }
-            .store(in: &cancellables)
     }
 }

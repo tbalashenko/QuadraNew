@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SmallButton: View {
     let image: String
+    var withBackground: Bool
     var foregroundStyle: Color = .accentColor
     var action: () -> Void
     
@@ -20,8 +21,22 @@ struct SmallButton: View {
                 .smallButtonImage()
                 .foregroundStyle(foregroundStyle)
         }
-        .buttonStyle(NeuButtonStyle())
+        .buttonStyle(
+            NeuButtonStyle(
+                size: SizeConstants.smallButtonSize,
+                withBackground: withBackground
+            )
+        )
     }
+}
+
+#Preview {
+    SmallButton(
+        image: "lightbulb.circle.fill",
+        withBackground: false,
+        foregroundStyle: Color.accentColor,
+        action: {}
+    )
 }
 
 

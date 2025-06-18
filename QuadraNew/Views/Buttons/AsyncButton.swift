@@ -8,19 +8,12 @@
 import SwiftUI
 
 struct AsyncButton<Label: View>: View {
+    let isEnabled: Bool
     let action: () async -> Void
-    let label: Label
+    let label: () -> Label
     
     @State private var isRunning = false
-    
-    init(
-        action: @escaping () async -> Void,
-        @ViewBuilder label: () -> Label
-    ) {
-        self.action = action
-        self.label = label()
-    }
-    
+
     var body: some View {
         Button {
             isRunning = true
@@ -29,8 +22,8 @@ struct AsyncButton<Label: View>: View {
                 isRunning = false
             }
         } label: {
-            label
+            label()
         }
-        .disabled(isRunning)
+        .disabled(isRunning || !isEnabled)
     }
 }

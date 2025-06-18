@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct VoicePickerView: View {
-    @EnvironmentObject var settings: SettingsService
     @ObservedObject var viewModel: SettingsViewModel
     
     var body: some View {
@@ -16,22 +15,20 @@ struct VoicePickerView: View {
             if let voices = language.voices {
                 Picker(
                     language.title,
-                    selection: Binding(
-                        get: { viewModel.selectedVoices[language] ?? voices.first! },
-                        set: { viewModel.selectedVoices[language] = $0 }
-                    )) {
-                        ForEach(voices, id: \.self) { voice in
-                            Text((voice.name))
-                                .tag(voice)
-                        }
+                    selection: $viewModel.selectedVoices[language]
+                ) {
+                    ForEach(voices, id: \.self) { voice in
+                        Text((voice.name))
+                            .tag(voice)
                     }
-                    .pickerStyle(.menu)
+                }
+                .pickerStyle(.menu)
+                
                 LabeledContent(TextConstants.sampleText) {
                     HStack {
                         Text(language.samplePhrase)
                         if let voice = viewModel.selectedVoices[language] {
-                            TextToSpeechPlayView(
-                                viewModel: TextToSpeechViewModel(settings: settings),
+                            PlayButton(
                                 text: language.samplePhrase,
                                 language: language,
                                 voice: voice
