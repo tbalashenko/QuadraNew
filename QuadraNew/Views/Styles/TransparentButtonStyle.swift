@@ -1,0 +1,24 @@
+//
+//  TransparentButtonStyle.swift
+//  QuadraSwiftData
+//
+//  Created by Tatyana Balashenko on 18/05/2025.
+//
+
+import SwiftUI
+
+struct TransparentButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundColor(.black)
+            .padding(8)
+            .background {
+                RoundedRectangle(cornerRadius: SizeConstants.cornerRadius)
+                    .fill(Color.white.opacity(0.5))
+            }
+    }
+}
+
+extension ButtonStyle where Self == TransparentButtonStyle {
+    static var transparentButtonStyle: TransparentButtonStyle { .init() }
+}
