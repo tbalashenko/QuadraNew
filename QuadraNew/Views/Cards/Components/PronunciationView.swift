@@ -1,5 +1,5 @@
 //
-//  TranscriptionView.swift
+//  Pronunciation.swift
 //  QuadraNew
 //
 //  Created by Tatyana Balashenko on 06/06/2025.
@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct TranscriptionView: View {
-    let transcription: String
+struct PronunciationView: View {
+    let pronunciation: String
     
     var body: some View {
-        Text("/\(transcription)/")
+        Text("/\(pronunciation)/")
             .font(.system(size: 14, design: .monospaced))
             .foregroundColor(.secondary)
             .padding(.horizontal)
@@ -19,5 +19,5 @@ struct TranscriptionView: View {
 }
 
 #Preview {
-    TranscriptionView(transcription: "ˈæpl")
+    PronunciationView(pronunciation: "ˈæpl")
 }

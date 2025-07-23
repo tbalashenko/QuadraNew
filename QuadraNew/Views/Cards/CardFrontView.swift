@@ -25,7 +25,7 @@ struct CardFrontView: View {
                                 .applyingFont(.subheadline.italic())
                         )
                     ) {
-                        SmallButton(image: "translate", withBackground: false) { }
+                        NeuButton(image: "translate", withBackground: false) { }
                     }
                     
                     PlayableTextView(

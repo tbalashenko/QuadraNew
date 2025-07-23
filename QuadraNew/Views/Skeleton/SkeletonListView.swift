@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SkeletonListView: View {
+    @EnvironmentObject var settings: SettingsService
+    @EnvironmentObject var sizeConstants: SizeConstants
     @Binding var isPresented: Bool
     
     private var currentOpacity: CGFloat { isPresented ? 1 : 0 }
@@ -17,6 +19,8 @@ struct SkeletonListView: View {
             ForEach(0..<10) { _ in
                 SkeletonListRowView()
                     .customListRow()
+                    .environmentObject(settings)
+                    .environmentObject(sizeConstants)
             }
         }
         .customListStyle()
@@ -27,4 +31,6 @@ struct SkeletonListView: View {
 
 #Preview {
     SkeletonListView(isPresented: .constant(true))
+        .environmentObject(SettingsService())
+        .environmentObject(SizeConstants(settings: SettingsService()))
 }

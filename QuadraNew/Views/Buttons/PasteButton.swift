@@ -11,18 +11,14 @@ struct PasteButton: View {
     var action: ((String) -> Void)?
 
     var body: some View {
-        Button {
+        NeuButton(image: "doc.on.clipboard", withBackground: false) {
             Task {
                 await MainActor.run {
                     action?(UIPasteboard.general.string ?? "")
                 }
             }
-        } label: {
-            Image(systemName: "doc.on.clipboard")
-                .smallButtonImage()
-                .foregroundColor(Color.accentColor)
         }
-        .frame(size: SizeConstants.smallButtonSize)
+        
     }
 }
 

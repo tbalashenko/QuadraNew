@@ -16,7 +16,7 @@ final class CardService: ObservableObject {
             archiveTag: archiveTag,
             cardSources: input.sources,
             definition: input.definition,
-            transcription: input.transcription,
+            pronunciation: input.pronunciation,
             phraseToRememberLanguage: input.phraseToRememberLanguage,
             imageData: input.imageData,
             croppedImageData: input.croppedImageData
@@ -35,8 +35,8 @@ final class CardService: ObservableObject {
     func updateCard(_ card: Card, with input: CardInput, context: ModelContext) throws {
         card.phraseToRemember = NSAttributedString(input.phrase)
         card.translation = NSAttributedString(input.translation)
-        if let transcription = input.transcription {
-            card.transcription = transcription
+        if let pronunciation = input.pronunciation {
+            card.pronunciation = pronunciation
         }
         if let definition = input.definition {
             card.definition = NSAttributedString(definition)

@@ -13,7 +13,6 @@ struct TextFieldWithFlippableButton: View {
     
     var error: String
     let placeholder: String
-    var font: Font
     var additionalButtonImage: Image? = nil
     var additionalAsyncButtonAction: (() async -> Void)? = nil
     var pasteButtonAction: ((String) -> Void)?
@@ -26,7 +25,6 @@ struct TextFieldWithFlippableButton: View {
         VStack(alignment: .leading) {
             HStack {
                 TextField(placeholder, text: $text, axis: .vertical)
-                    .font(font)
                     .textFieldStyle(NeuTextFieldStyle(text: $text))
                     .onSubmit { hideKeyboard() }
                     .submitLabel(.done)
@@ -58,7 +56,7 @@ struct TextFieldWithFlippableButton: View {
                 }
             } label: {
                 additionalButtonImage
-                    .smallButtonImage()
+                    .setupButtonImage(size: .small)
                     .foregroundStyle(Color.accentColor)
             }
         }
@@ -71,7 +69,7 @@ struct TextFieldWithFlippableButton: View {
     @Previewable 
     @State var text2: AttributedString = ""
     
-    TextFieldWithFlippableButton(text: $text, error: "Test", placeholder: "Placeholder", font: .system(size: 18, weight: .bold))
+    TextFieldWithFlippableButton(text: $text, error: "Test", placeholder: "Placeholder")
     HighlightableTextView(text: $text2, placeholder: "Placeholder", error: "Test")
         .environmentObject(SettingsService())
 }

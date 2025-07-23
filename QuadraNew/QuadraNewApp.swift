@@ -16,15 +16,20 @@ struct QuadraNewApp: App {
     @StateObject private var sizeConstants: SizeConstants
     @StateObject private var cardService: CardService
     @StateObject private var filterService: FilterService
+    @StateObject private var statDataService: StatDataService
+    @StateObject private var randomDataService: RandomDataService
     
     init() {
         let settings = SettingsService()
         let cardService = CardService()
         let filterService = FilterService()
+        let statDataService = StatDataService()
         _settingsService = StateObject(wrappedValue: settings)
         _cardService = StateObject(wrappedValue: cardService)
         _sizeConstants = StateObject(wrappedValue: SizeConstants(settings: settings))
         _filterService = StateObject(wrappedValue: filterService)
+        _statDataService = StateObject(wrappedValue: statDataService)
+        _randomDataService = StateObject(wrappedValue: RandomDataService(statDataService: statDataService))
         
         ValueTransformer.setValueTransformer(
             AttributedStringTransformer(),
@@ -68,5 +73,7 @@ struct QuadraNewApp: App {
         .environmentObject(sizeConstants)
         .environmentObject(cardService)
         .environmentObject(filterService)
+        .environmentObject(statDataService)
+        .environmentObject(randomDataService)
     }
 }

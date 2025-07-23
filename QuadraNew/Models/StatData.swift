@@ -17,19 +17,22 @@ final class StatData {
     var addedItemsCounter: Int
     var deletedItemsCounter: Int
     var repeatedItemsCounter: Int
+    var memorizedItemsCounter: Int
     var totalNumberOfCards: Int
     
     init(
         date: Date = Date(),
-        addedItemsCounter: Int,
-        deletedItemsCounter: Int,
-        repeatedItemsCounter: Int,
-        totalNumberOfCards: Int
+        addedItemsCounter: Int = 0,
+        deletedItemsCounter: Int = 0,
+        repeatedItemsCounter: Int = 0,
+        memorizedItemsCounter: Int = 0,
+        totalNumberOfCards: Int = 0
     ) {
-        self.date = date
+        self.date = date.formattedForStats() ?? Date()
         self.addedItemsCounter = addedItemsCounter
         self.deletedItemsCounter = deletedItemsCounter
         self.repeatedItemsCounter = repeatedItemsCounter
+        self.memorizedItemsCounter = memorizedItemsCounter
         self.totalNumberOfCards = totalNumberOfCards
     }
 }

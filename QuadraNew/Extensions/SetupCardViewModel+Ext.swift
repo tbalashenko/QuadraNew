@@ -33,7 +33,7 @@ extension SetupCardViewModel {
         setupPhraseToRemember()
         setupTranslation()
         setupDefinition() 
-        setupTranscription()
+        setupPronunciation()
         setupNewSourceText()
     }
     
@@ -108,21 +108,21 @@ extension SetupCardViewModel {
             .store(in: &cancellables)
     }
     
-    private func setupTranscription() {
-        $transcription
+    private func setupPronunciation() {
+        $pronunciation
             .receive(on: RunLoop.main)
             .map { $0.count <= SizeConstants.textLimit }
-            .assign(to: \.isTranscriptionValid, on: self)
+            .assign(to: \.isPronunciationValid, on: self)
             .store(in: &cancellables)
-        $isTranscriptionValid
+        $isPronunciationValid
             .receive(on: RunLoop.main)
             .sink { [weak self] isValid in
                 guard let self = self else { return }
                 
                 if isValid {
-                    self.transcriptionError = ""
+                    self.pronunciationError = ""
                 } else {
-                    Helper.getErrorMessage(for: self.transcription, errorText: &self.transcriptionError)
+                    Helper.getErrorMessage(for: self.pronunciation, errorText: &self.pronunciationError)
                 }
             }
             .store(in: &cancellables)
@@ -242,7 +242,7 @@ extension SetupCardViewModel {
         return CardInput(
             phrase: phraseToRemember,
             translation: translation,
-            transcription: transcription,
+            pronunciation: pronunciation,
             definition: definition,
             phraseToRememberLanguage: phraseToRememberLanguage?.rawValue,
             sources: selectedSources,

@@ -19,10 +19,7 @@ struct EditableCardView: View {
             FlippableCardView(viewModel: viewModel)
                 .toolbar {
                     ToolbarItem {
-                        SmallButton(
-                            image: "pencil.circle",
-                            withBackground: true
-                        ) {
+                        NeuButton(image: "pencil.circle") {
                             showSetupCardView = true
                         }
                     }

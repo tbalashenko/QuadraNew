@@ -65,7 +65,7 @@ struct ListRowView: View {
     private var overlayImage: some View {
         let color = cardViewModel.card.isImageDark ?? false ? Color.pureWhite : Color.pureBlack
         return Image(systemName: isMaxImageSize ? "arrow.left.to.line.compact" : "arrow.right.to.line.compact")
-            .smallButtonImage()
+            .setupButtonImage(size: .small)
             .foregroundColor(color)
             .offset(x: offset)
             .opacity(0.5)

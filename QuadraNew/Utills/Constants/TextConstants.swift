@@ -11,13 +11,10 @@ struct TextConstants {
     static let imageUrl = "Image URL"
     static let addImageUrl = "Add image URL"
     static let phraseToRemember = "Phrase to remember"
-    static let addPhrase = "Add a new phrase"
-    static let translation = "Translation"
-    static let addTranslation = "Add it's translation"
+    static let addPhrase = "Add a new phrase*"
+    static let translation = "Translation*"
     static let definition = "Definition"
-    static let addDefinition = "Add it's definition"
-    static let transcription = "Transcription"
-    static let addTranscription = "Add it's transcription"
+    static let pronunciation = "Pronunciation"
     static let sources = "Sources"
     static let selectedSources = "Selected sources:"
     static let expressionToSearch = "Enter an expression"
@@ -47,15 +44,18 @@ struct TextConstants {
     static let selectLanguagesToStudy = "Select the languages you want to learn"
     
     static let addFirstCards = "1. Tap the plus button \n to add your first cards."
-    static let readThem = "2. Read every phrase aloud \n to make it stick."
-    static let swipeThem = "3. Swipe left or right."
+    
+    static let recallThem = "2. Try to recall the phrase \nusing the picture, translation, or hint."
+    static let checkYourself = "3. Check yourself"
+    static let swipeThem = "4. Swipe right if you remember, swipe left if you don't"
     static let returnBackEveryDay = "4. Return to the app daily to review previous cards and add new ones."
+    
     static let continueAddAndRepHelp = "Continue adding and repeating your cards daily to see statistics"
     static let added = "Added:"
     static let numberOfRepetitions = "Number of repetitions:"
     static let lastReview = "Last review:"
     static let warning = "Warning"
-    static let thatsItForToday = "That's it for today, \n but you can add new cards"
+    static let thatsItForToday = "That's it for today, \nbut you can add new cards"
     static let enterExpression = "Enter the expression you want to remember and tap the search button."
     static let noSamplePhrases = "Sorry, we didn't find any good example for you"
     static let copied = "Copied!"
@@ -67,6 +67,13 @@ struct TextConstants {
     
     static let from = "From"
     static let to = "To"
+    
+    //EmptyView
+    static let filterEmptyText = "You don’t have any cards to filter yet./nTry adding one!"
+    
+    //Footnotes
+    static let filterFootnote = "Leaving a filter empty means it won’t affect the results — all cards will be shown based on the other filters with selected options."
+    
     
     // Navigation Titles
     static let filter = "Filter"

@@ -39,22 +39,10 @@ struct FlippableView<Front: View, Back: View>: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    Button {
-                        flip()
-                    } label: {
-                        Image(systemName: "repeat")
-                            .smallButtonImage()
-                            .padding()
-                            .foregroundStyle(Color.gray.opacity(0.5))
-                            .background(.ultraThinMaterial)
-                            .clipShape(Circle())
-                            .northWestShadow()
-                    }
-                    .frame(size: SizeConstants.largeButtonSize)
-                    .padding(.bottom, SizeConstants.screenHeight * 0.15)
-                    .padding(.trailing, SizeConstants.screenWidth * 0.2)
+                    IconCircleButton(systemName: "repeat", size: .s) { flip() }
                 }
             }
+            .offset(x: SizeConstants.cardWidth / -4, y: SizeConstants.cardHeight / -4)
         }
     }
     
@@ -70,3 +58,32 @@ struct FlippableView<Front: View, Back: View>: View {
     }
 }
 
+struct IconCircleButton: View {
+    let systemName: String
+    let size: ButtonSize
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .resizable()
+                .scaledToFit()
+                .frame(size: size.size)
+                .foregroundStyle(Color.gray.opacity(0.5))
+                .padding()
+                .background(Color.element)
+                .clipShape(Circle())
+                .northWestShadow()
+        }
+    }
+}
+
+
+#Preview {
+    FlippableView(front: {
+        CardFrontView(viewModel: CardViewModel(card: MockData.cards.first!, mode: .view))
+    }, back: {
+        CardBackView(viewModel: CardViewModel(card: MockData.cards.first!, mode: .view))
+    })
+    .environmentObject(SizeConstants(settings: SettingsService()))
+}

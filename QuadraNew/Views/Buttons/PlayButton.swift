@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct PlayButton: View {
     @EnvironmentObject var settings: SettingsService
@@ -16,10 +17,7 @@ struct PlayButton: View {
     var voice: Voice? = nil
     
     var body: some View {
-        SmallButton(
-            image: viewModel.isSpeaking ? "stop.circle" : "play.circle",
-            withBackground: true
-        ) {
+        NeuButton(image: viewModel.isSpeaking ? "stop.circle" : "play.circle") {
             viewModel.speak(
                 text: text,
                 language: language,

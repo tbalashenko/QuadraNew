@@ -22,8 +22,8 @@ struct CardBackView: View {
                     language: viewModel.phraseToRememberLanguage
                 )
             )
-            if viewModel.showTranscription {
-                TranscriptionView(transcription: viewModel.transcription)
+            if viewModel.showPronunciation {
+                PronunciationView(pronunciation: viewModel.pronunciation)
             }
         }
     }

@@ -17,7 +17,8 @@ struct PlainButtonWithImage: View {
             onAction?()
         } label: {
             Label(title, systemImage: image)
+                .foregroundStyle(Color.DynamicColor.black)
         }
-        .buttonStyle(NeuButtonStyle(size: SizeConstants.plainButtonSize))
+        .buttonStyle(.neuButtonStyle(size: .plain, withBackground: true))
     }
 }

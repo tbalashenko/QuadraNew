@@ -31,7 +31,7 @@ struct SourceListRowView: View {
                     
                     Spacer()
                     
-                    SmallButton(
+                    NeuButton(
                         image: "checkmark.circle.fill",
                         withBackground: false,
                         foregroundStyle: viewModel.editableTitle.isEmpty
@@ -43,7 +43,7 @@ struct SourceListRowView: View {
                     }
                     .disabled(viewModel.editableTitle.isEmpty)
                     
-                    SmallButton(
+                    NeuButton(
                         image: "xmark.circle.fill",
                         withBackground: false,
                         foregroundStyle: .puce

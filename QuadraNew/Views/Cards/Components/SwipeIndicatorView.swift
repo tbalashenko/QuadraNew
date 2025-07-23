@@ -18,17 +18,29 @@ struct SwipeIndicatorView: View {
                     .frame(size: SizeConstants.xLargeButtonImageSize)
                     .foregroundStyle(Color.Green.darkSeaGreen.opacity(0.3))
                     .rotationEffect(.degrees(-30))
-                    .opacity (Double(xOffset / (SizeConstants.screenWidth / 3)))
+                    .opacity(Double(xOffset / (SizeConstants.screenWidth / 3)))
+                    .padding()
+                    .background(
+                        Circle()
+                            .fill(Color.element.opacity(Double(xOffset / (SizeConstants.screenWidth / 3))))
+                    )
+                    .northWestShadow()
                 Spacer()
             }
             Spacer()
             VStack {
-                Image(systemName: "xmark.app")
+                Image(systemName: "xmark.circle.fill")
                     .resizable()
                     .frame(size: SizeConstants.xLargeButtonImageSize)
                     .foregroundStyle(Color.dustRose.opacity(0.3))
                     .rotationEffect(.degrees(30))
-                    .opacity (Double(xOffset / (SizeConstants.screenWidth / 3) * -1))
+                    .opacity(Double(xOffset / (SizeConstants.screenWidth / 3) * -1))
+                    .padding()
+                    .background(
+                        Circle()
+                            .fill(Color.element.opacity(Double(xOffset / (SizeConstants.screenWidth / 3) * -1)))
+                    )
+                    .northWestShadow()
                 Spacer()
             }
         }

@@ -13,9 +13,11 @@ struct CardsListView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var filterService: FilterService
     @StateObject var viewModel: ListViewModel
+    @StateObject private var loadingManager = LoadingManager()
     @Query private var allCards: [Card]
     @Query private var archiveTags: [ArchiveTag]
     @Query private var cardSources: [CardSource]
+    @State private var showFilterView: Bool = false
     
     init(viewModel: ListViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -38,7 +40,10 @@ struct CardsListView: View {
                     }
                 }
             }
-            .onAppear { update() }
+            .overlay { SkeletonListView(isPresented: $loadingManager.isLoading) }
+            .onAppear {
+                update()
+            }
             .searchable(
                 text: $viewModel.searchText,
                 placement: .navigationBarDrawer(displayMode: .automatic)
@@ -48,10 +53,17 @@ struct CardsListView: View {
             .toolbar(.visible, for: .tabBar)
             .toolbar {
                 ToolbarItem {
-                    NavigationLinkWithImage(
-                        destination: { FilterView(viewModel: FilterViewModel(filterService: filterService)) },
-                        image: "line.3.horizontal.decrease.circle.fill"
-                    )
+                    NeuButton(image: "line.3.horizontal.decrease.circle.fill") {
+                        showFilterView = true
+                    }
+                }
+            }
+            .sheet(isPresented: $showFilterView) {
+                NavigationStack {
+                    FilterView(viewModel: FilterViewModel(filterService: filterService))
+                        .presentationDetents([.medium, .large])
+                        .navigationTitle(TextConstants.filter)
+                        .navigationBarTitleDisplayMode(.inline)
                 }
             }
         }
@@ -79,7 +91,16 @@ struct CardsListView: View {
     }
     
     private func update() {
-        filterService.setData(cards: allCards, archiveTags: archiveTags, cardSources: cardSources)
-        viewModel.setData(cards: allCards)
+        loadingManager.runWithLoading(delay: 1) {
+            filterService.setData(cards: allCards, archiveTags: archiveTags, cardSources: cardSources)
+            viewModel.setData(cards: allCards)
+        }
     }
+}
+
+#Preview {
+    CardsListView(viewModel: ListViewModel(filterService: FilterService()))
+        .environmentObject(SettingsService())
+        .environmentObject(SizeConstants(settings: SettingsService()))
+        .environmentObject(FilterService())
 }

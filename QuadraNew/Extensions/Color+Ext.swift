@@ -30,6 +30,16 @@ extension Color {
     
     //dynamic colors
     static let dynamicGray = Color(light: .platinum, dark: .smokyBlack)
+    
+    struct Light {
+        static let black = Color(hex: "0x212121")
+        static let white = Color(hex: "0xFFFFFF")
+    }
+
+    struct Dark {
+        static let black = Color(hex: "0x1F1F1F")
+        static let white = Color(hex: "0xFFFFFF")
+    }
 
     struct Green {
         static var isabelline = Color(hex: "#edf5ec") // very light green
@@ -38,12 +48,12 @@ extension Color {
     }
     
     struct Status {
-        static var ashGray0 = Color(hex: "#EFF4F0")
-        static var ashGray1 = Color(hex: "#E7EEE8")
-        static var ashGray2 = Color(hex: "#DFE9E1")
-        static var ashGray3 = Color(hex: "#D7E3D9")
-        static var ashGray4 = Color(hex: "#CFDDD1")
-        static var ashGray5 = Color(hex: "#C7D8CA")
+        static var energyGreen0 = Color(hex: "#BBE3CB")
+        static var energyGreen1 = Color(hex: "#A4DAB9")
+        static var energyGreen2 = Color(hex: "#8ED1A8")
+        static var energyGreen3 = Color(hex: "#77C896")
+        static var energyGreen4 = Color(hex: "#60BF85")
+        static var energyGreen5 = Color(hex: "#49B573")
     }
 
     struct Month {
@@ -59,6 +69,11 @@ extension Color {
         static var october = Color(hex: "#AC5E39")
         static var november = Color(hex: "#323B3E")
         static var december = Color(hex: "#671A0C")
+    }
+    
+    struct DynamicColor {
+        static let black = Color(light: Light.black, dark: Dark.white)
+        static let white = Color(light: Light.white, dark: Dark.black)
     }
 }
 

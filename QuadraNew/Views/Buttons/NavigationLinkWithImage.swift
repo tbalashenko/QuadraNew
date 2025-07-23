@@ -14,9 +14,9 @@ struct NavigationLinkWithImage<Destination: View>: View {
     var body: some View {
         NavigationLink(destination: destination) {
             Image(systemName: image)
-                .smallButtonImage()
+                .setupButtonImage(size: .small)
                 .foregroundStyle(Color.accentColor)
         }
-        .buttonStyle(NeuButtonStyle(size: SizeConstants.smallButtonSize))
+        .buttonStyle(.neuButtonStyle())
     }
 }

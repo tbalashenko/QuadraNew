@@ -10,7 +10,7 @@ import SwiftUI
 struct CardInput {
     var phrase: AttributedString
     var translation: AttributedString
-    var transcription: String?
+    var pronunciation: String?
     var definition: AttributedString?
     var phraseToRememberLanguage: String?
     var sources: [CardSource]

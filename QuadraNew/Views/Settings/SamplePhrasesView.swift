@@ -20,7 +20,6 @@ struct SamplePhrasesView: View {
                             text: $viewModel.searchText,
                             error: viewModel.searchTextError,
                             placeholder: TextConstants.expressionToSearch,
-                            font: .system(size: 18, weight: .bold),
                             additionalButtonImage: Image(systemName: "magnifyingglass.circle.fill"),
                             additionalAsyncButtonAction: { await viewModel.loadSamples() },
                             pasteButtonAction: {

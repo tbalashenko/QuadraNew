@@ -1,0 +1,52 @@
+//
+//  ChartView.swift
+//  Quadra
+//
+//  Created by Tatyana Balashenko on 15/05/2024.
+//
+
+import SwiftUI
+import SwiftData
+
+struct ChartView: View {
+    @Binding var selectedPeriod: Period
+    var toggleBindings: [Binding<Bool>]
+    @ObservedObject var viewModel: StatViewModel
+    @Query var statData: [StatData]
+
+
+    var body: some View {
+        GeometryReader { geometry in
+            List {
+                Group {
+                    ChartLinesView(
+                        viewModel: viewModel,
+                        selectedPeriod: $selectedPeriod
+                    )
+                    .frame(height: geometry.size.width)
+//                    .onChange(of: selectedPeriod) { viewModel.fetchStatData(fromDate: selectedPeriod.fromDate) }
+//                    .onAppear { viewModel.fetchStatData(fromDate: selectedPeriod.fromDate) }
+                    PeriodPickerView(selectedPeriod: $selectedPeriod)
+                    ChartLineToggleView(toggleBindings: toggleBindings)
+                }
+                .listRowBackground(Color.element)
+            }
+            .customListStyle()
+            .navigationTitle(TextConstants.statistics)
+        }
+    }
+}
+
+#Preview {
+    let toggle1 = Binding<Bool>(get: { false }, set: { _ in })
+    let toggle2 = Binding<Bool>(get: { true }, set: { _ in })
+    let toggle3 = Binding<Bool>(get: { true }, set: { _ in })
+    let toggle4 = Binding<Bool>(get: { true }, set: { _ in })
+
+    let toggleBindings: [Binding<Bool>] = [toggle1, toggle2, toggle3, toggle4]
+
+    return ChartView(
+        selectedPeriod: .constant(.last2Weeks),
+        toggleBindings: toggleBindings,
+        viewModel: StatViewModel())
+}

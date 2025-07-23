@@ -21,14 +21,20 @@ struct AddNewSourceView: View {
             TextField(TextConstants.addSource, text: $viewModel.newSourceText)
                 .textFieldStyle(NeuTextFieldStyle(text: $viewModel.newSourceText))
                 .padding(.horizontal, 4)
-            Button(action: {
+            
+            NeuButton(
+                image: "plus",
+                buttonSize: .m,
+                imageSize: .small
+            ) {
                 viewModel.saveSource(context: context)
                 hideKeyboard()
-            }, label: {
-                Image(systemName: "plus")
-            })
-            .buttonStyle(NeuButtonStyle(size: SizeConstants.mediumButtonImageSize))
+            }
             .disabled(viewModel.newSourceText.isEmpty)
         }
     }
+}
+
+#Preview {
+    AddNewSourceView(viewModel: SetupCardViewModel(mode: .create, sources: []))
 }

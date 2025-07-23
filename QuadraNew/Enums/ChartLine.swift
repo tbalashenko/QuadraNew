@@ -11,6 +11,7 @@ import SwiftUI
 enum ChartLine: String, CaseIterable, Identifiable {
     case totalNumber = "Total number of cards"
     case added = "Number of added cards"
+    case memorized = "Number of memorized cards"
     case deleted = "Number of deleted cards"
     case repeated = "Number of repeated cards"
 
@@ -18,14 +19,11 @@ enum ChartLine: String, CaseIterable, Identifiable {
 
     var color: Color {
         switch self {
-            case .totalNumber:
-                return .blue
-            case .added:
-                return .yellow
-            case .deleted:
-                return .red
-            case .repeated:
-                return .green
+            case .totalNumber: .blue
+            case .added: .yellow
+            case .deleted: .red
+            case .repeated: .mint
+            case .memorized: .green
         }
     }
 

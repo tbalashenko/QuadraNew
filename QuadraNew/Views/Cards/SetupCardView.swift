@@ -34,7 +34,7 @@ struct SetupCardView: View {
                     phraseToRemember
                     translation
                     definition
-                    transcription
+                    pronunciation
                 }
                 Section(TextConstants.sources) {
                     sources
@@ -72,7 +72,6 @@ struct SetupCardView: View {
             text: $viewModel.url,
             error: viewModel.urlError,
             placeholder: TextConstants.addImageUrl,
-            font: .system(size: 18, design: .monospaced),
             additionalButtonImage: Image(systemName: "square.and.arrow.down"),
             additionalAsyncButtonAction: { await viewModel.downloadImage() },
             pasteButtonAction: {
@@ -107,7 +106,7 @@ struct SetupCardView: View {
     private var translation: some View {
         HighlightableTextView(
             text: $viewModel.translation,
-            placeholder: TextConstants.addTranslation,
+            placeholder: TextConstants.translation,
             error: viewModel.translationError
         ) {
             viewModel.formatAndSetPhrase($0, string: &viewModel.translation)
@@ -118,7 +117,7 @@ struct SetupCardView: View {
     private var definition: some View {
         HighlightableTextView(
             text: $viewModel.definition,
-            placeholder: TextConstants.addDefinition,
+            placeholder: TextConstants.definition,
             error: viewModel.definitionError
         ) {
             viewModel.formatAndSetPhrase($0, string: &viewModel.definition)
@@ -126,15 +125,14 @@ struct SetupCardView: View {
         }
     }
     
-    private var transcription: some View  {
+    private var pronunciation: some View  {
         TextFieldWithFlippableButton(
-            text: $viewModel.transcription,
-            error: viewModel.transcriptionError,
-            placeholder: TextConstants.addTranscription,
-            font: .system(size: 18, design: .monospaced),
+            text: $viewModel.pronunciation,
+            error: viewModel.pronunciationError,
+            placeholder: TextConstants.pronunciation,
             pasteButtonAction: { text in
                 withAnimation {
-                    viewModel.transcription = text
+                    viewModel.pronunciation = text
                 }
                 showPopup = true
             }

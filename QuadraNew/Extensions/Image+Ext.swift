@@ -15,10 +15,10 @@ extension Image {
         return renderer.uiImage
     }
     
-    func smallButtonImage() -> some View {
+    func setupButtonImage(size: ImageSize) -> some View {
         self
             .resizable()
             .scaledToFit()
-            .frame(size: SizeConstants.smallButtonImageSize)
+            .frame(size: size.size)
     }
 }

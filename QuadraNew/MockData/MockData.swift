@@ -15,7 +15,9 @@ struct MockData {
             archiveTag: ArchiveTag(),
             cardSources: [],
             definition: "What is your definition? What if it's longer than I expected",
-            phraseToRememberLanguage: Language.english.rawValue
+            phraseToRememberLanguage: Language.english.rawValue,
+            imageData: UIImage(named: "testImage")?.pngData(),
+            croppedImageData: UIImage(named: "testImage")?.pngData(),
         )
     ]
     

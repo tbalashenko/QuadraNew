@@ -13,9 +13,13 @@ final class CardViewModel: ObservableObject {
     @Published var phraseToRemember: AttributedString = ""
     @Published var phraseToRememberLanguage: Language?
     @Published var translation: AttributedString = ""
-    @Published var transcription = ""
+    @Published var pronunciation = ""
     @Published var definition: AttributedString = ""
-    @Published var hintStage: HintStage = .translation
+    @Published var hintStage: HintStage = .translation {
+        didSet {
+            updateCurrentHintText()
+        }
+    }
     
     @Published var image: Image?
     @Published var fullImage: Image?
@@ -25,30 +29,18 @@ final class CardViewModel: ObservableObject {
     
     @Published var additionalInfo = [Info]()
     @Published var tags = [TagCloudItem]()
-    
+    @Published var currentHintText: AttributedString
+
     private var cachedHint: AttributedString?
     
     var card: Card
     let mode: CardViewMode
     
-    var showTranscription: Bool {
-        !transcription.isEmpty
+    var showPronunciation: Bool {
+        !pronunciation.isEmpty
     }
     
-    var currentHintText: AttributedString {
-        switch hintStage {
-            case .translation:
-                return translation
-            case .definition:
-                return definition
-            case .obscuredPhrase:
-                if let cachedHint { return cachedHint }
-                let hint = getHint()
-                cachedHint = hint
-                return hint
-        }
-    }
-
+    
     var isFinalHintStage: Bool {
         hintStage.isFinal
     }
@@ -60,9 +52,11 @@ final class CardViewModel: ObservableObject {
         if let languageRawValue = card.phraseToRememberLanguage {
             self.phraseToRememberLanguage = Language(rawValue: languageRawValue)
         }
+        
         self.translation = AttributedString(card.translation)
-        if let transcription = card.transcription {
-            self.transcription = transcription
+        self.currentHintText = AttributedString(card.translation)
+        if let pronunciation = card.pronunciation {
+            self.pronunciation = pronunciation
         }
         
         if let definition = card.definition {
@@ -183,5 +177,23 @@ final class CardViewModel: ObservableObject {
         //
         //            try? context.save()
         //        }
+    }
+    
+    
+    private func updateCurrentHintText() {
+        switch hintStage {
+            case .translation:
+                currentHintText = translation
+            case .definition:
+                currentHintText = definition
+            case .obscuredPhrase:
+                if let cachedHint {
+                    currentHintText = cachedHint
+                } else {
+                    let hint = getHint()
+                    cachedHint = hint
+                    currentHintText = hint
+                }
+        }
     }
 }

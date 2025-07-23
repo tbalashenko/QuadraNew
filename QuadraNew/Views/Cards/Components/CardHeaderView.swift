@@ -53,17 +53,10 @@ struct CardHeaderView: View {
 #Preview {
     CardHeaderView(
         viewModel: CardViewModel(
-            card: Card(
-                phraseToRemember: "What is your name? What if it's longer than I expected",
-                translation: "Test",
-                archiveTag: ArchiveTag(),
-                cardSources: [],
-                definition: "Text",
-                phraseToRememberLanguage: "en",
-                imageData: UIImage(named: "testImage")?.pngData(),
-                croppedImageData: UIImage(named: "testImage")?.pngData(),
-            ), mode: .view
+            card: MockData.cards.first!,
+            mode: .view
         )
     )
     .frame(size: SizeConstants(settings: SettingsService()).imageSize)
+    .environmentObject(SizeConstants(settings: SettingsService()))
 }

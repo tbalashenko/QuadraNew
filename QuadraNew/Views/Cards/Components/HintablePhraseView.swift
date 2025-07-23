@@ -33,7 +33,7 @@ struct HintablePhraseView: View {
             }
         } label: {
             Image(systemName: "lightbulb.min.fill")
-                .smallButtonImage()
+                .setupButtonImage(size: .small)
                 .foregroundStyle(viewModel.isFinalHintStage ? .gray.opacity(0.5) : .yellow)
                 .opacity(isHintPressed ? 1 : 0.5)
                 .scaleEffect(isHintPressed ? 1.4 : 1.0)

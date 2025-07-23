@@ -12,16 +12,22 @@ struct HowToUseTheAppView: View {
         VStack(spacing: 16) {
             HStack {
                 Text(TextConstants.addFirstCards)
-                SmallButton(image: "plus.circle.fill", withBackground: false) { }
+                NeuButton(image: "plus.circle.fill", withBackground: false) { }
                 Spacer()
             }
             
             HStack {
                 Spacer()
-                Text(TextConstants.readThem)
+                Text(TextConstants.recallThem)
             }
             
             DummyAutoswipingCardView()
+            
+            HStack(spacing: SizeConstants.spacing) {
+                Spacer()
+                Text(TextConstants.checkYourself)
+                IconCircleButton(systemName: "repeat", size: .xxs, action: {})
+            }
             
             HStack {
                 Text(TextConstants.swipeThem)

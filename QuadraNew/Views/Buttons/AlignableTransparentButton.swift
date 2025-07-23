@@ -32,13 +32,12 @@ struct AlignableTransparentButton<Content: View>: View {
 #Preview {
     ZStack {
         Rectangle()
-        AlignableTransparentButton(
-            alignment: .topLeading) {
-                Image(systemName: "trash")
-                    .smallButtonImage()
-            } action: {
-                print("trash")
-            }
+        AlignableTransparentButton(alignment: .topLeading) {
+            Image(systemName: "trash")
+                .setupButtonImage(size: .small)
+        } action: {
+            print("trash")
+        }
     }
     .frame(size: CGSize(width: 300, height: 300))
 }

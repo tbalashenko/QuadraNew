@@ -87,7 +87,7 @@ struct PhotoPickerView: View {
     private var trashButton: some View {
         AlignableTransparentButton(alignment: .topTrailing) {
             Image(systemName: "trash")
-                .smallButtonImage()
+                .setupButtonImage(size: .small)
         } action: {
             clearImages()
         }
@@ -96,7 +96,7 @@ struct PhotoPickerView: View {
     private var cropButton: some View {
         AlignableTransparentButton(alignment: .topLeading) {
             Image(systemName: "crop")
-                .smallButtonImage()
+                .setupButtonImage(size: .small)
         } action: {
             showEditingView.toggle()
         }

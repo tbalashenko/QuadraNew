@@ -19,6 +19,6 @@ struct NavigationLinkWithTextAndImage<Destination: View>: View {
         } label: {
             Label(title, systemImage: image)
         }
-        .buttonStyle(NeuButtonStyle(size: SizeConstants.plainButtonSize))
+        .buttonStyle(.neuButtonStyle(size: .plain))
     }
 }

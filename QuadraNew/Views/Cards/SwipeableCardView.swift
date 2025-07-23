@@ -61,7 +61,7 @@ private extension SwipeableCardView {
             xOffset = 500
             degrees = 12
         } completion: {
-            viewModel.swipeCard(card: card, cardService: cardService, context: context, swipeSide: .right)
+            swipe(swipeSide: .right)
         }
     }
     
@@ -70,8 +70,17 @@ private extension SwipeableCardView {
             xOffset = -500
             degrees = -12
         } completion: {
-            viewModel.swipeCard(card: card, cardService: cardService, context: context, swipeSide: .left)
+            swipe(swipeSide: .left)
         }
+    }
+    
+    private func swipe(swipeSide: SwipeAction) {
+        viewModel.swipeCard(
+            card: card,
+            cardService: cardService,
+            context: context,
+            swipeSide: swipeSide
+        )
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  SmallButton.swift
+//  NeuButton.swift
 //  QuadraNew
 //
 //  Created by Tatyana Balashenko on 31/05/2025.
@@ -7,36 +7,43 @@
 
 import SwiftUI
 
-struct SmallButton: View {
+struct NeuButton: View {
     let image: String
-    var withBackground: Bool
+    var buttonSize: ButtonSize = .s
+    var imageSize: ImageSize = .small
+    var withBackground: Bool = true
     var foregroundStyle: Color = .accentColor
     var action: () -> Void
     
     var body: some View {
-        Button(action: {
+        Button {
             action()
-        }) {
+        } label: {
             Image(systemName: image)
-                .smallButtonImage()
-                .foregroundStyle(foregroundStyle)
+                .setupButtonImage(size: imageSize)
         }
         .buttonStyle(
             NeuButtonStyle(
-                size: SizeConstants.smallButtonSize,
-                withBackground: withBackground
+                foregroundColor: foregroundStyle,
+                size: buttonSize,
+                withBackground: withBackground,
             )
         )
     }
 }
 
 #Preview {
-    SmallButton(
+    NeuButton(
         image: "lightbulb.circle.fill",
         withBackground: false,
         foregroundStyle: Color.accentColor,
         action: {}
     )
+    NeuButton(
+        image: "plus",
+        buttonSize: .m,
+        imageSize: .small
+    ) {  }
 }
 
 

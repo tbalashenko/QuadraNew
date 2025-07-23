@@ -23,7 +23,7 @@ struct ContentView: View {
             ZStack {
                 Color.element
                     .ignoresSafeArea()
-                ForEach(viewModel.readyToRepeatCards) { card in
+                ForEach(viewModel.readyToRepeatCards.prefix(4)) { card in
                     SwipeableCardView(card: card, viewModel: viewModel)
                 }
                 
@@ -44,14 +44,12 @@ struct ContentView: View {
                     setCards()
                 }
             }
-            .onDisappear {
-                viewModel.showConfetti = false
-            }
+            .onDisappear { viewModel.onDisappear() }
             .toolbar {
                 ToolbarItem {
-                    SmallButton(
+                    NeuButton(
                         image: "plus.circle.fill",
-                        withBackground: false
+                        withBackground: true
                     ) {
                         showSetupCardView = true
                     }

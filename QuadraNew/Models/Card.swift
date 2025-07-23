@@ -17,7 +17,7 @@ final class Card {
     var isArchived: Bool = false
     var repetitionCounter: Int = 0
     
-    var creationDate: Date = Date()
+    var creationDate: Date
     var lastReviewDate: Date?
     // first time is right after creation
     var nextReviewDate: Date = Date()
@@ -28,7 +28,7 @@ final class Card {
     var translation: NSAttributedString
     @Attribute(.transformable(by: "AttributedStringTransformer"))
     var definition: NSAttributedString?
-    var transcription: String?
+    var pronunciation: String?
     var phraseToRememberLanguage: String?
     
     @Attribute(.externalStorage)
@@ -48,10 +48,11 @@ final class Card {
         archiveTag: ArchiveTag,
         cardSources: [CardSource],
         definition: AttributedString? = nil,
-        transcription: String? = nil,
+        pronunciation: String? = nil,
         phraseToRememberLanguage: String?,
         imageData: Data? = nil,
-        croppedImageData: Data? = nil
+        croppedImageData: Data? = nil,
+        creationDate: Date = Date()
     ) {
         self.archiveTag = archiveTag
         
@@ -60,10 +61,11 @@ final class Card {
         if let definition = definition {
             self.definition = NSAttributedString(definition)
         }
-        self.transcription = transcription
+        self.pronunciation = pronunciation
         self.phraseToRememberLanguage = phraseToRememberLanguage
         self.imageData = imageData
         self.croppedImageData = croppedImageData
         self.cardSources = cardSources
+        self.creationDate = creationDate
     }
 }

@@ -44,4 +44,9 @@ final class ContentViewModel: ObservableObject {
         showConfetti = readyToRepeatCards.isEmpty
         showInfoView = readyToRepeatCards.isEmpty
     }
+    
+    func onDisappear() {
+        showConfetti = false
+        readyToRepeatCards.removeAll()
+    }
 }

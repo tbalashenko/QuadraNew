@@ -43,17 +43,17 @@ enum CardStatus: Int, CaseIterable {
     var color: Color {
         switch self {
             case .input:
-                Color.Status.ashGray0
+                Color.Status.energyGreen0
             case .nextDay:
-                Color.Status.ashGray1
+                Color.Status.energyGreen1
             case .day7:
-                Color.Status.ashGray2
+                Color.Status.energyGreen2
             case .day30:
-                Color.Status.ashGray3
+                Color.Status.energyGreen3
             case .day60:
-                Color.Status.ashGray4
+                Color.Status.energyGreen4
             case .day90:
-                Color.Status.ashGray5
+                Color.Status.energyGreen5
             case .archive:
                 Color.spanishGray
         }

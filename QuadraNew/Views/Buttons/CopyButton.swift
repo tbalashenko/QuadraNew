@@ -12,15 +12,10 @@ struct CopyButton: View {
     var action: (() -> Void)?
 
     var body: some View {
-        Button {
+        NeuButton(image: "doc.on.doc") {
             UIPasteboard.general.string = text
             action?()
-        } label: {
-            Image(systemName: "doc.on.doc")
-                .smallButtonImage()
-                .foregroundColor(Color.accentColor)
         }
-        .frame(size: SizeConstants.smallButtonSize)
     }
 }
 

@@ -25,9 +25,9 @@ final class SetupCardViewModel: ObservableObject {
     @Published var isTranslationValid: Bool = false
     @Published var translationError = ""
     
-    @Published var transcription = ""
-    @Published var isTranscriptionValid: Bool = true
-    @Published var transcriptionError = ""
+    @Published var pronunciation = ""
+    @Published var isPronunciationValid: Bool = true
+    @Published var pronunciationError = ""
     
     @Published var definition: AttributedString = ""
     @Published var isDefinitionValid: Bool = true
@@ -54,7 +54,7 @@ final class SetupCardViewModel: ObservableObject {
         !translation.isEmpty &&
         isPhraseToRememberValid &&
         isTranslationValid &&
-        isTranscriptionValid &&
+        isPronunciationValid &&
         isDefinitionValid
     }
     
@@ -72,7 +72,7 @@ final class SetupCardViewModel: ObservableObject {
             self.card = card
             self.phraseToRemember = AttributedString(card.phraseToRemember)
             self.translation = AttributedString(card.translation)
-            self.transcription = card.transcription ?? ""
+            self.pronunciation = card.pronunciation ?? ""
             if let definition = card.definition {
                 self.definition = AttributedString(definition)
             }

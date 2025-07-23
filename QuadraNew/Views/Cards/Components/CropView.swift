@@ -55,7 +55,7 @@ struct CropView: View {
                     }
                 AlignableTransparentButton(alignment: .topLeading) {
                     Image(systemName: "rotate.left")
-                        .smallButtonImage()
+                        .setupButtonImage(size: .small)
                 } action: {
                     rotationDegrees -= 90
                     reset()
@@ -63,7 +63,7 @@ struct CropView: View {
                 .padding()
                 AlignableTransparentButton(alignment: .topTrailing) {
                     Image(systemName: "rotate.right")
-                        .smallButtonImage()
+                        .setupButtonImage(size: .small)
                 } action: {
                     rotationDegrees += 90
                     reset()
